@@ -1,0 +1,69 @@
+SRCDIR=Win32
+CL=cl
+OBJDIR=obj\$(VSCMD_ARG_TGT_ARCH)
+BINDIR=bin\$(VSCMD_ARG_TGT_ARCH)
+BUNDLE=bundle
+RESFILE=$(OBJDIR)\mpwshell.res
+APP=$(BINDIR)\mpwshell.exe
+MSI=MPWShell-$(mpwshell_STR3)-$(VSCMD_ARG_TGT_ARCH).msi
+CHM=htmlhelp\mpwshell.chm
+SRC=$(SRCDIR)\mpwshell.c
+
+all: $(APP) $(MSI)
+	
+clean: 
+	if exist $(APP) del $(APP)
+	if exist $(OBJDIR)\*.obj del $(OBJDIR)\*.obj
+	if exist $(OBJDIR)\*.res del $(OBJDIR)\*.res
+	if exist $(OBJDIR) rmdir $(OBJDIR)
+	if exist $(BINDIR) rmdir $(BINDIR)
+
+$(APP): $(SRC) $(OBJDIR) $(BINDIR) $(RESFILE)
+	$(CL) 							\
+		/nologo						\
+		/Fe$@ 						\
+		/Fo$(OBJDIR)\				\
+		/W3 						\
+		/WX 						\
+		/MT 						\
+		/DNDEBUG 					\
+		/DUNICODE					\
+		$(SRC) 						\
+		/link						\
+		/INCREMENTAL:NO				\
+		/PDB:NONE					\
+		/SUBSYSTEM:WINDOWS			\
+		user32.lib					\
+		gdi32.lib					\
+		shell32.lib					\
+		advapi32.lib				\
+		htmlhelp.lib				\
+		comdlg32.lib				\
+		version.lib					\
+		/VERSION:$(mpwshell_INT2)	\
+		$(RESFILE)
+	if exist "$(BINDIR)\mpwshell.exp" del "$(BINDIR)\mpwshell.exp"
+	if exist "$(BINDIR)\mpwshell.lib" del "$(BINDIR)\mpwshell.lib"
+	signtool sign /sha1 "$(CertificateThumbprint)" /fd SHA256 /t http://timestamp.digicert.com $@
+
+$(RESFILE): $(SRCDIR)\mpwshell.rc
+	rc /r $(RCFLAGS) "/Dmpwshell_INT4=$(mpwshell_INT4)" "/Dmpwshell_STR4=\"$(mpwshell_STR4)\"" /fo$@ $(SRCDIR)\mpwshell.rc
+
+$(OBJDIR) $(BINDIR) $(BUNDLE):
+	mkdir $@
+
+$(MSI): $(APP) $(CHM) "mpwshell.wxs"
+	"$(WIX)bin\candle.exe" -nologo \
+			"mpwshell.wxs" \
+			"-dmpwshell_STR4=$(mpwshell_STR4)" \
+			"-dmpwshell_STR3=$(mpwshell_STR3)" \
+			"-dMSIARCH=$(VSCMD_ARG_TGT_ARCH)" \
+			"-dMSIUPGRADECODE=$(MSIUPGRADECODE)" \
+			"-dMSIIS64BIT=$(MSIIS64BIT)" \
+			"-dMSIINSTALLVERS=$(MSIINSTALLVERS)" \
+			"-dMSIPROGFILES=$(MSIPROGFILES)" \
+			"-dMSISHORTCUTID=$(MSISHORTCUTID)"
+	"$(WIX)bin\light.exe" -nologo -cultures:null -out $@ "mpwshell.wixobj"
+	del "mpwshell.wixobj"
+	del "mpwshell-$(mpwshell_STR3)-$(VSCMD_ARG_TGT_ARCH).wixpdb"
+	signtool sign /sha1 "$(CertificateThumbprint)" /fd SHA256 /t http://timestamp.digicert.com $@

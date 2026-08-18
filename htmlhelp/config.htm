@@ -1,0 +1,47 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<HTML>
+<HEAD>
+<meta name="GENERATOR" content="Microsoft&reg; HTML Help Workshop 4.1">
+<Title>Configuration</Title>
+</HEAD>
+<BODY>
+<H1>Configuration</H1>
+<P>The registry entries are at 'HKLM:\SOFTWARE\rhubarb-geek-nz\MPW Shell'.</P>
+<TABLE border="1">
+	<THEAD>
+		<TR align="left">
+			<TH>Name</TH>
+			<TH>Type</TH>
+			<TH>Purpose</TH>
+			<TH>Example</TH>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR>
+			<TD>ToolServer</TD>
+			<TD>String</TD>
+			<TD>Command line used to run the PowerShell server</TD>
+			<TD>PowerShell.exe -NoProfile -NoLogo -NonInteractive -Command $ErrorActionPreference='Stop'; Import-Module 'C:\Program Files\rhubarb-geek-nz\MPW Shell\Modules\rhubarb-geek-nz.ToolServer\0.9.0\rhubarb-geek-nz.ToolServer.psd1' ; Invoke-MPWShell.ToolServer -Protocol 0c63fba6-7c2a-4b72-8de0-b3bd579dedaa</TD>
+		</TR>
+		<TR>
+			<TD>TextLimit</TD>
+			<TD>DWord</TD>
+			<TD>Used to set EM_SETLIMITTEXT on the main edit control</TD>
+			<TD>0x100000</TD>
+		</TR>
+		<TR>
+			<TD>InitialScript</TD>
+			<TD>String</TD>
+			<TD>Used to initialise each Runspace</TD>
+			<TD>if ($PSStyle) { $PSStyle.OutputRendering = 'PlainText' } ; Import-Module 'C:\Program Files\rhubarb-geek-nz\MPW Shell\Modules\rhubarb-geek-nz.MPWShell\0.9.0\rhubarb-geek-nz.MPWShell.psd1'</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<H2>Notes</H2>
+<UL>
+	<LI>'PowerShell.exe' can be replaced by 'pwsh.exe'</LI>
+	<LI>The server can be any program as long as it talks using the correct protocol using stdin and stdout</LI>
+	<LI>The configuration can be overridden in 'HKCU:\Software\rhubarb-geek-nz\MPW Shell'</LI>
+</UL>
+</BODY>
+</HTML>

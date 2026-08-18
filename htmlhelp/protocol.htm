@@ -1,0 +1,126 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<HTML>
+<HEAD>
+<meta name="GENERATOR" content="Microsoft&reg; HTML Help Workshop 4.1">
+<Title>Protocol</Title>
+</HEAD>
+<BODY>
+<H1>Protocol</H1>
+<P>There is a packet based protocol between client and server consisting. Each packet has 4 DWORD values followed by string data</P>
+<UL>
+<LI>packetType - defined purpose for the package</LI>
+<LI>sourceId - component that originated the request</LI>
+<LI>targetId - recipient of the packet</LI>
+<LI>dataLen - length of payload</LI>
+<LI>string body data in UTF-8 encoding</LI>
+</UL>
+<P>The messages are as follows</P>
+<TABLE border="1">
+	<THEAD>
+		<TR align="left">
+			<TH>Code</TH>
+			<TH>Purpose</TH>
+			<TH>Payload</TH>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR>
+			<TD>0x80</TD>
+			<TD>Echo Request</TD>
+			<TD>Hello World</TD>
+		</TR>
+		<TR>
+			<TD>0x81</TD>
+			<TD>Echo Response</TD>
+			<TD>Hello World</TD>
+		</TR>
+		<TR>
+			<TD>0x40</TD>
+			<TD>Script Reply</TD>
+			<TD>Output Data</TD>
+		</TR>
+		<TR>
+			<TD>0x41</TD>
+			<TD>Reply to create new runspace</TD>
+			<TD></TD>
+		</TR>
+		<TR>
+			<TD>0x42</TD>
+			<TD>Obituary from a runspace</TD>
+			<TD></TD>
+		</TR>
+		<TR>
+			<TD>0x43</TD>
+			<TD>Exception occurred on server</TD>
+			<TD>Printable exception data</TD>
+		</TR>
+		<TR>
+			<TD>0x44</TD>
+			<TD>Exception occurred on server</TD>
+			<TD>Printable exception data</TD>
+		</TR>
+		<TR>
+			<TD>0x45</TD>
+			<TD>Command has completed</TD>
+			<TD></TD>
+		</TR>
+		<TR>
+			<TD>0x46</TD>
+			<TD>Used internally by client</TD>
+			<TD>Text response from server before protocol start</TD>
+		</TR>
+		<TR>
+			<TD>0x47</TD>
+			<TD>Create new document</TD>
+			<TD>Initial content of document</TD>
+		</TR>
+		<TR>
+			<TD>0x48</TD>
+			<TD>Open existing document</TD>
+			<TD>Full file path to document</TD>
+		</TR>
+		<TR>
+			<TD>0x49</TD>
+			<TD>Show an alert</TD>
+			<TD>Text for the alert</TD>
+		</TR>
+		<TR>
+			<TD>0x50</TD>
+			<TD>Excute script</TD>
+			<TD>Contents of script</TD>
+		</TR>
+		<TR>
+			<TD>0x51</TD>
+			<TD>Request to create new runspace</TD>
+			<TD>Initial script</TD>
+		</TR>
+		<TR>
+			<TD>0x52</TD>
+			<TD>Stop the given runspace</TD>
+			<TD></TD>
+		</TR>
+		<TR>
+			<TD>0x53</TD>
+			<TD>Stop all runspaces associated with this clientId</TD>
+			<TD></TD>
+		</TR>
+		<TR>
+			<TD>0x54</TD>
+			<TD>Stop the current task</TD>
+			<TD></TD>
+		</TR>
+		<TR>
+			<TD>0x55</TD>
+			<TD>Attach this client to a runspace</TD>
+			<TD>Initial script</TD>
+		</TR>
+		<TR>
+			<TD>0x60</TD>
+			<TD>Server has died</TD>
+			<TD></TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<P>The protocol allows free-form text to be received prior to establishment of the protocol. This assists solving problems during start up. The protocol officially starts once a known GUID in text followed by CR/LF is received. This GUID is 0c63fba6-7c2a-4b72-8de0-b3bd579dedaa.</P>
+</BODY>
+</HTML>

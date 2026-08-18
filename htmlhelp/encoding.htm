@@ -1,0 +1,22 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<HTML>
+<HEAD>
+<meta name="GENERATOR" content="Microsoft&reg; HTML Help Workshop 4.1">
+<Title>Encoding</Title>
+</HEAD>
+<BODY>
+<H1>Encoding</H1>
+<P>Text encoding follows some rules.</P>
+<P>When reading;</P>
+<UL>
+<LI>If it starts with a 2 byte UNICODE BOM then the file is treated as 16-bit UNICODE</LI>
+<LI>Otherwise if it starts with the 3 byte UTF-8 BOM then it is treated as 8-bit UTF-8</LI>
+<LI>Finally, if neither applies then it uses the process default code page, for example 1252</LI>
+</UL>
+<P>When writing;</P>
+<UL>
+<LI>If the first character is a BOM it writes it as UNICODE or UTF-8 depending on how it was read</LI>
+<LI>Otherwise it uses the process default code page</LI>
+</UL>
+</BODY>
+</HTML>

@@ -1,0 +1,47 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFrameworks>net10.0;net8.0;net481</TargetFrameworks>
+    <Copyright>Copyright © 2026 Roger Brown</Copyright>
+    <Version>1.0.0</Version>
+    <Company>rhubarb-geek-nz</Company>
+    <AssemblyName>ToolServer</AssemblyName>
+    <AssemblyTitle>PowerShell ToolServer</AssemblyTitle>
+    <Product>ToolServer for PowerShell</Product>
+    <PackageId>ToolServer</PackageId>
+    <Title>ToolServer for PowerShell</Title>
+    <Description>ToolServer for PowerShell</Description>
+    <Authors>Roger Brown</Authors>
+    <PackageProjectUrl>https://github.com/rhubarb-geek-nz/MPWShell</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/rhubarb-geek-nz/MPWShell.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <CertificateThumbprint>601A8B683F791E51F647D34AD102C38DA4DDB65F</CertificateThumbprint>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ToolServerPS\ToolServerPS.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net10.0' ">
+    <PackageReference Include="Microsoft.PowerShell.SDK" Version="7.6.5"/>
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net8.0' ">
+    <PackageReference Include="Microsoft.PowerShell.SDK" Version="7.4.18"/>
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net481' ">
+    <PackageReference Include="PowerShellStandard.Library" Version="5.1.1"/>
+  </ItemGroup>
+
+  <Target Name="Sign" AfterTargets="Compile" Condition=" '$(Configuration)' == 'Release' AND '$(OS)' == 'Windows_NT' ">
+    <ItemGroup>
+        <FileToSign Include="$(IntermediateOutputPath)$(TargetFileName)" />
+    </ItemGroup>
+    <Message Importance="high" Text="Signing assemblies: @(FileToSign)" />
+    <SignFile SigningTarget="@(FileToSign)" CertificateThumbprint="$(CertificateThumbprint)" TimestampUrl="http://timestamp.digicert.com" />
+  </Target>
+
+</Project>

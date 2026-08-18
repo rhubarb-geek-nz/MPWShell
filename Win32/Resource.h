@@ -1,0 +1,47 @@
+// Copyright (c) 2026 Roger Brown.
+// Licensed under the MIT License.
+
+#define IDI_MPWSHELL                    1
+#define IDS_APP_TITLE                   103
+#define IDD_ABOUTBOX                    103
+#define IDM_ABOUT                       104
+#define IDS_CANNOT_FIND_FILE            104
+#define IDM_EXIT                        105
+#define IDS_GOTO_RANGE_ERROR            108
+#define IDC_MPWSHELL                    109
+#define IDC_CONTENT                     110
+#define IDS_TITLE_WITH_FILE             111
+#define IDS_SAVECONTENT                 112
+#define IDS_SAVEFILE                    113
+#define IDS_SAVEFILTER                  114
+#define IDS_SENDFEEDBACKURL             115
+#define IDM_HELP_VIEWHELP               130
+#define IDD_GOTO                        130
+#define IDM_HELP_SENDFEEDBACK           131
+#define IDM_FILE_NEW                    132
+#define IDM_FILE_OPEN                   134
+#define IDM_FILE_SAVE                   135
+#define IDM_FILE_SAVEAS                 136
+#define IDM_EDIT_UNDO                   139
+#define IDM_EDIT_CUT                    140
+#define IDM_EDIT_COPY                   141
+#define IDM_EDIT_PASTE                  142
+#define IDM_EDIT_DELETE                 143
+#define IDM_EDIT_FIND                   145
+#define IDM_EDIT_FINDNEXT               146
+#define IDM_EDIT_FINDPREVIOUS           147
+#define IDM_EDIT_REPLACE                148
+#define IDM_EDIT_GOTO                   149
+#define IDM_EDIT_SELECTALL              150
+#define IDM_EDIT_TIME                   151
+#define IDM_FORMAT_WORDWRAP             152
+#define IDM_FORMAT_FONT                 153
+#define IDM_VIEW_ZOOM                   154
+#define IDM_VIEW_STATUSBAR              155
+#define IDM_ZOOM_RESTOREDEFAULT         156
+#define IDM_ZOOM_ZOOMIN                 157
+#define IDM_ZOOM_ZOOMOUT                158
+#define IDM_EXECUTE_SCRIPT              159
+#define IDM_CANCEL                      160
+#define IDC_LINENUMBER                  1000
+#define IDC_STATIC                      -1

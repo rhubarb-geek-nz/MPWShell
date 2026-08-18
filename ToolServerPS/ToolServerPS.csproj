@@ -1,0 +1,47 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Copyright>Copyright © 2026 Roger Brown</Copyright>
+    <Version>1.0.0</Version>
+    <Company>rhubarb-geek-nz</Company>
+    <AssemblyName>RhubarbGeekNz.ToolServer</AssemblyName>
+    <AssemblyTitle>PowerShell ToolServer Cmdlets</AssemblyTitle>
+    <Product>ToolServer for PowerShell</Product>
+    <PackageId>rhubarb-geek-nz.ToolServer</PackageId>
+    <Title>ToolServer Cmdlets for PowerShell</Title>
+    <Description>ToolServer Cmdlets for PowerShell</Description>
+    <Authors>Roger Brown</Authors>
+    <PackageProjectUrl>https://github.com/rhubarb-geek-nz/MPWShell</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/rhubarb-geek-nz/MPWShell.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <CertificateThumbprint>601A8B683F791E51F647D34AD102C38DA4DDB65F</CertificateThumbprint>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="PowerShellStandard.Library" Version="5.1.1">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <Target Name="Sign" AfterTargets="Compile" Condition=" '$(Configuration)' == 'Release' AND '$(OS)' == 'Windows_NT' ">
+    <ItemGroup>
+        <FileToSign Include="$(IntermediateOutputPath)$(TargetFileName)" />
+    </ItemGroup>
+    <Message Importance="high" Text="Signing assemblies: @(FileToSign)" />
+    <SignFile SigningTarget="@(FileToSign)" CertificateThumbprint="$(CertificateThumbprint)" TimestampUrl="http://timestamp.digicert.com" />
+  </Target>
+
+  <Target Name="Package" AfterTargets="Publish" Condition=" '$(Configuration)' == 'Release' ">
+    <ItemGroup>
+      <FilesToDelete Include="$(PublishDir)*.deps.json" />
+      <FilesToDelete Include="$(PublishDir)*.pdb" />
+    </ItemGroup>
+    <Delete Files="@(FilesToDelete)" />
+    <Exec Command="pwsh -ExecutionPolicy Bypass -NoProfile -File ./package.ps1 $(ProjectName) $(IntermediateOutputPath) $(OutDir) $(PublishDir) $(Version)" />
+    <RemoveDir Directories="$(PublishDir)runtimes" />
+    <Delete Files="$(OutDir)$(PackageId).psd1" />
+  </Target>
+
+</Project>

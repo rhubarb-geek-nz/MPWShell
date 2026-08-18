@@ -1,0 +1,47 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<HTML>
+<HEAD>
+<meta name="GENERATOR" content="Microsoft&reg; HTML Help Workshop 4.1">
+<!-- Sitemap 1.0 -->
+</HEAD><BODY>
+<OBJECT type="text/site properties">
+	<param name="ImageType" value="Folder">
+</OBJECT>
+<UL>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Overview">
+		<param name="Local" value="mpwshell.htm">
+		</OBJECT>
+	</LI>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Configuration">
+		<param name="Local" value="config.htm">
+		</OBJECT>
+	</LI>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Printing">
+		<param name="Local" value="printing.htm">
+		</OBJECT>
+	</LI>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Problems">
+		<param name="Local" value="problems.htm">
+		</OBJECT>
+	</LI>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Protocol">
+		<param name="Local" value="protocol.htm">
+		</OBJECT>
+	</LI>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Encoding">
+		<param name="Local" value="encoding.htm">
+		</OBJECT>
+	</LI>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="License">
+		<param name="Local" value="license.htm">
+		</OBJECT>
+	</LI>
+</UL>
+</BODY></HTML>

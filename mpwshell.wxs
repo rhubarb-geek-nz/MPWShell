@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Product Id="*" Name="MPW Shell ($(var.MSIARCH))" Language="1033" Version="$(var.mpwshell_STR4)" Manufacturer="rhubarb-geek-nz" UpgradeCode="$(var.MSIUPGRADECODE)">
+    <Package InstallerVersion="$(var.MSIINSTALLVERS)" Compressed="yes" InstallScope="perMachine" Platform="$(var.MSIARCH)" Description="Text Editor based on Notepad for $(var.MSIARCH)" Comments="See https://mpwshell.sf.net" />
+    <MediaTemplate EmbedCab="yes" />
+    <Feature Id="ProductFeature" Title="setup" Level="1">
+      <ComponentGroupRef Id="ProductComponents" />
+    </Feature>
+    <Upgrade Id="{$(var.MSIUPGRADECODE)}">
+      <UpgradeVersion Maximum="$(var.mpwshell_STR4)" Property="OLDPRODUCTFOUND" OnlyDetect="no" IncludeMinimum="yes" IncludeMaximum="no" />
+    </Upgrade>
+    <InstallExecuteSequence>
+      <RemoveExistingProducts After="InstallInitialize" />
+    </InstallExecuteSequence>
+    <Condition Message="This application is only supported on Windows 7 or higher."><![CDATA[Installed OR (VersionNT > 600)]]></Condition>
+    <Feature Id="PathFeature" Title="PATH" Level="1" Absent="disallow" AllowAdvertise="no" Display="hidden" >
+      <ComponentRef Id="ApplicationShortcut" />
+      <ComponentRef Id="MPWShell.exe" />
+    </Feature>
+    <DirectoryRef Id="ApplicationProgramsFolder">
+      <Component Id="ApplicationShortcut" Guid="$(var.MSISHORTCUTID)">
+        <Shortcut Id="ApplicationStartMenuShortcut"
+                  Name="MPW Shell"
+                  Description="MPW Shell for $(var.MSIARCH)"
+                  Target="[INSTALLDIR]\MPWShell.exe"
+                  Arguments="-WorkingDirectory %USERPROFILE%"
+                  WorkingDirectory="INSTALLDIR"/>
+        <RemoveFolder Id="CleanUpShortCut" Directory="ApplicationProgramsFolder" On="uninstall"/>
+        <RegistryValue Root="HKCU" Key="Software\rhubarb-geek-nz\MPW Shell" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
+      </Component>
+    </DirectoryRef>
+  </Product>
+  <Fragment>
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="$(var.MSIPROGFILES)">
+        <Directory Id="COMPANYDIR" Name="rhubarb-geek-nz">
+          <Directory Id="INSTALLDIR" Name="MPW Shell">
+            <Directory Id="INSTALLDIR1" Name="Modules">
+              <Directory Id="INSTALLDIR2" Name="rhubarb-geek-nz.MPWShell">
+                <Directory Id="INSTALLDIR3" Name="$(var.mpwshell_STR3)"/>
+              </Directory>
+              <Directory Id="INSTALLDIR4" Name="rhubarb-geek-nz.ToolServer">
+                <Directory Id="INSTALLDIR5" Name="$(var.mpwshell_STR3)"/>
+              </Directory>
+            </Directory>
+          </Directory>
+        </Directory>
+      </Directory>
+      <Directory Id="ProgramMenuFolder" Name="ProgramMenuFolder" >
+        <Directory Id="ApplicationProgramsFolder" Name="MPW Shell"/>
+      </Directory>
+    </Directory>
+  </Fragment>
+  <Fragment>
+    <ComponentGroup Id="ProductComponents">
+      <Component Id="MPWShell.exe" Guid="*" Directory="INSTALLDIR" Win64="$(var.MSIIS64BIT)">
+        <File Id="MPWShell.exe" KeyPath="yes" Source="bin\$(var.MSIARCH)\MPWShell.exe" />
+      </Component>
+      <Component Id="MPWShell.chm" Guid="*" Directory="INSTALLDIR" Win64="$(var.MSIIS64BIT)">
+        <File Id="MPWShell.chm" KeyPath="yes" Source="htmlhelp\MPWShell.chm" />
+      </Component>
+      <Component Id="ToolServer.dll" Guid="*" Directory="INSTALLDIR5" Win64="$(var.MSIIS64BIT)">
+        <File Id="RhubarbGeekNz.ToolServer.dll" KeyPath="yes" Source="ToolServerPS\bin\Release\netstandard2.0\publish\RhubarbGeekNz.ToolServer.dll" />
+        <RegistryValue Id="ToolServer" Root="HKLM" Key="SOFTWARE\rhubarb-geek-nz\MPW Shell" Name="ToolServer" Value="PowerShell.exe -NoProfile -NoLogo -NonInteractive -Command $ErrorActionPreference='Stop'; Import-Module '[INSTALLDIR5]rhubarb-geek-nz.ToolServer.psd1' ; Invoke-MPWShell.ToolServer -Protocol 0c63fba6-7c2a-4b72-8de0-b3bd579dedaa" Type="string" Action="write" />
+        <RegistryValue Id="TextLimit" Root="HKLM" Key="SOFTWARE\rhubarb-geek-nz\MPW Shell" Name="TextLimit" Value="1048576" Type="integer" Action="write" />
+        <RegistryValue Id="InitialScript" Root="HKLM" Key="SOFTWARE\rhubarb-geek-nz\MPW Shell" Name="InitialScript" Value="if ($PSStyle) { $PSStyle.OutputRendering = 'PlainText' } ; Import-Module '[INSTALLDIR3]rhubarb-geek-nz.MPWShell.psd1'" Type="string" Action="write" />
+      </Component>
+      <Component Id="ToolServer.psd1" Guid="*" Directory="INSTALLDIR5" Win64="$(var.MSIIS64BIT)">
+        <File Id="ToolServer.psd1" KeyPath="yes" Source="ToolServerPS\bin\Release\netstandard2.0\publish\rhubarb-geek-nz.ToolServer.psd1" />
+      </Component>
+      <Component Id="MPWShell.dll" Guid="*" Directory="INSTALLDIR3" Win64="$(var.MSIIS64BIT)">
+        <File Id="MPWShell.dll" KeyPath="yes" Source="MPWShellPS\bin\Release\netstandard2.0\publish\RhubarbGeekNz.MPWShell.dll" />
+      </Component>
+      <Component Id="MPWShell.psd1" Guid="*" Directory="INSTALLDIR3" Win64="$(var.MSIIS64BIT)">
+        <File Id="MPWShell.psd1" KeyPath="yes" Source="MPWShellPS\bin\Release\netstandard2.0\publish\rhubarb-geek-nz.MPWShell.psd1" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+</Wix>

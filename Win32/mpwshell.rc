@@ -1,0 +1,155 @@
+// Copyright (c) 2026 Roger Brown.
+// Licensed under the MIT License.
+
+#include "Resource.h"
+
+#include "targetver.h"
+#include "windows.h"
+
+LANGUAGE LANG_ENGLISH, SUBLANG_NEUTRAL
+#pragma code_page(1252)
+
+IDI_MPWSHELL            ICON                    "mpwshell.ico"
+
+IDC_MPWSHELL MENUEX
+BEGIN
+    POPUP "&File",                          65535,MFT_STRING,MFS_ENABLED
+    BEGIN
+        MENUITEM "&New\tCtrl+N",                IDM_FILE_NEW,MFT_STRING,MFS_ENABLED
+        MENUITEM MFT_SEPARATOR
+        MENUITEM "&Open…\tCtrl+O",              IDM_FILE_OPEN,MFT_STRING,MFS_GRAYED
+        MENUITEM "&Save\tCtrl+S",               IDM_FILE_SAVE,MFT_STRING,MFS_GRAYED
+        MENUITEM "Save &As…\tCtrl+Shift+S",     IDM_FILE_SAVEAS,MFT_STRING,MFS_GRAYED
+        MENUITEM MFT_SEPARATOR
+        MENUITEM "E&xit",                       IDM_EXIT,MFT_STRING,MFS_ENABLED
+    END
+    POPUP "&Edit",                          65535,MFT_STRING,MFS_ENABLED
+    BEGIN
+        MENUITEM "&Undo\tCtrl+Z",               IDM_EDIT_UNDO,MFT_STRING,MFS_ENABLED
+        MENUITEM MFT_SEPARATOR
+        MENUITEM "Cu&t\tCtrl+X",                IDM_EDIT_CUT,MFT_STRING,MFS_ENABLED
+        MENUITEM "&Copy\tCtrl+C",               IDM_EDIT_COPY,MFT_STRING,MFS_ENABLED
+        MENUITEM "&Paste\tCtrl+V",              IDM_EDIT_PASTE,MFT_STRING,MFS_ENABLED
+        MENUITEM "De&lete\tDel",                IDM_EDIT_DELETE,MFT_STRING,MFS_ENABLED
+        MENUITEM MFT_SEPARATOR
+        MENUITEM "&Find…\tCtrl+F",              IDM_EDIT_FIND,MFT_STRING,MFS_GRAYED
+        MENUITEM "Find &Next\tF3",              IDM_EDIT_FINDNEXT,MFT_STRING,MFS_GRAYED
+        MENUITEM "Find Pre&vious\tShift+F3",    IDM_EDIT_FINDPREVIOUS,MFT_STRING,MFS_GRAYED
+        MENUITEM "&Replace…\tCtrl+H",           IDM_EDIT_REPLACE,MFT_STRING,MFS_GRAYED
+        MENUITEM "&Go To…\tCtrl+G",             IDM_EDIT_GOTO,MFT_STRING,MFS_GRAYED
+        MENUITEM MFT_SEPARATOR
+        MENUITEM "Select &All",                 IDM_EDIT_SELECTALL,MFT_STRING,MFS_ENABLED
+        MENUITEM "Time/&Date\tF5",              IDM_EDIT_TIME,MFT_STRING,MFS_ENABLED
+    END
+    POPUP "&Format",                        65535,MFT_STRING,MFS_ENABLED
+    BEGIN
+        MENUITEM "Word Wrap",                   IDM_FORMAT_WORDWRAP,MFT_STRING,MFS_ENABLED
+        MENUITEM "Font…",                       IDM_FORMAT_FONT,MFT_STRING,MFS_ENABLED
+    END
+    POPUP "&View",                          65535,MFT_STRING,MFS_ENABLED
+    BEGIN
+        POPUP "&Zoom",                          65535,MFT_STRING,MFS_ENABLED
+        BEGIN
+            MENUITEM "Zoom &In\tCtrl+Plus",         IDM_ZOOM_ZOOMIN,MFT_STRING,MFS_ENABLED
+            MENUITEM "Zoom &Out\tCtrl+Minus",       IDM_ZOOM_ZOOMOUT,MFT_STRING,MFS_ENABLED
+            MENUITEM "&Restore Default Zoom\tCtrl+0", IDM_ZOOM_RESTOREDEFAULT,MFT_STRING,MFS_GRAYED
+        END
+        MENUITEM "Status Bar",                  IDM_VIEW_STATUSBAR,MFT_STRING,MFS_GRAYED
+    END
+    POPUP "&Help",                          65535,MFT_STRING | MFT_RIGHTJUSTIFY,MFS_ENABLED
+    BEGIN
+        MENUITEM "View &Help",                  IDM_HELP_VIEWHELP,MFT_STRING,MFS_ENABLED
+        MENUITEM "Send &Feedback",              IDM_HELP_SENDFEEDBACK,MFT_STRING,MFS_ENABLED
+        MENUITEM MFT_SEPARATOR
+        MENUITEM "&About MPW Shell",            IDM_ABOUT,MFT_STRING,MFS_ENABLED
+    END
+END
+
+1 VERSIONINFO
+ FILEVERSION mpwshell_INT4
+ PRODUCTVERSION mpwshell_INT4
+ FILEFLAGSMASK 0x3fL
+ FILEFLAGS VS_FF_PRERELEASE
+ FILEOS VOS_NT_WINDOWS32
+ FILETYPE VFT_APP
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "000904e4"
+        BEGIN
+            VALUE "Comments", "See https://github.com/rhubarb-geek-nz/mpwshell\0"
+            VALUE "CompanyName", "rhubarb-geek-nz\0"
+            VALUE "FileDescription", "Text Editor based on Notepad\0"
+            VALUE "FileVersion", mpwshell_STR4
+            VALUE "InternalName", "mpwshell\0"
+            VALUE "LegalCopyright", "© Roger Brown. 2026\0"
+            VALUE "OriginalFilename", "MPWShell.exe\0"
+            VALUE "ProductName", "mpwshell\0"
+            VALUE "ProductVersion", mpwshell_STR4
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0009, 1252
+    END
+END
+
+IDC_MPWSHELL ACCELERATORS
+BEGIN
+    "A",            IDM_EDIT_SELECTALL,     VIRTKEY, CONTROL
+    "C",            IDM_EDIT_COPY,          VIRTKEY, CONTROL
+    "F",            IDM_EDIT_FIND,          VIRTKEY, CONTROL
+    "G",            IDM_EDIT_GOTO,          VIRTKEY, CONTROL
+    "H",            IDM_EDIT_REPLACE,       VIRTKEY, CONTROL
+    "N",            IDM_FILE_NEW,           VIRTKEY, CONTROL
+    "O",            IDM_FILE_OPEN,          VIRTKEY, CONTROL
+    "S",            IDM_FILE_SAVE,          VIRTKEY, CONTROL
+    "S",            IDM_FILE_SAVEAS,        VIRTKEY, SHIFT, CONTROL
+    "X",            IDM_EDIT_CUT,           VIRTKEY, CONTROL
+    "V",            IDM_EDIT_PASTE,         VIRTKEY, CONTROL
+    "Z",            IDM_EDIT_UNDO,          VIRTKEY, CONTROL
+    VK_ADD,         IDM_ZOOM_ZOOMIN,        VIRTKEY, CONTROL
+    VK_SUBTRACT,    IDM_ZOOM_ZOOMOUT,       VIRTKEY, CONTROL
+    VK_NUMPAD0,     IDM_ZOOM_RESTOREDEFAULT, VIRTKEY, CONTROL
+    VK_RETURN,      IDM_EXECUTE_SCRIPT,     VIRTKEY, CONTROL
+    VK_F3,          IDM_EDIT_FINDNEXT,      VIRTKEY 
+    VK_F3,          IDM_EDIT_FINDPREVIOUS,  VIRTKEY, SHIFT
+    VK_F5,          IDM_EDIT_TIME,          VIRTKEY
+	VK_CANCEL,      IDM_CANCEL,             VIRTKEY, CONTROL
+END
+
+IDD_ABOUTBOX DIALOGEX 0, 0, 170, 62
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "About MPW Shell"
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    ICON            IDI_MPWSHELL,IDC_STATIC,14,14,21,20
+    LTEXT           "MPW Shell, Version 1.0",IDC_STATIC,42,14,114,8,SS_NOPREFIX
+    LTEXT           "Copyright © 2026",IDC_STATIC,42,26,114,8
+    DEFPUSHBUTTON   "OK",IDOK,113,41,50,14,WS_GROUP
+END
+
+STRINGTABLE
+BEGIN
+    IDS_APP_TITLE           "MPW Shell"
+    IDS_CANNOT_FIND_FILE    "Cannot find the %s file.\r\n\r\nDo you want to create a new file?"
+    IDS_GOTO_RANGE_ERROR    "The line number is beyond the total number of lines"
+    IDC_MPWSHELL            "MPWSHELL"
+    IDS_TITLE_WITH_FILE     "MPW Shell - %s"
+    IDS_SAVECONTENT         "Do you want to save this content?"
+    IDS_SAVEFILE            "Do you want to save %s?"
+    IDS_SAVEFILTER          "Text Files\0*.TXT\0\0"
+    IDS_SENDFEEDBACKURL     "https://github.com/rhubarb-geek-nz/MPWShell"
+END
+
+IDD_GOTO DIALOGEX 0, 0, 154, 70
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Go To Line"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "&Line number",IDC_STATIC,8,8,78,8
+    EDITTEXT        IDC_LINENUMBER,8,24,138,14,ES_AUTOHSCROLL | ES_NUMBER
+    DEFPUSHBUTTON   "Go To",IDOK,42,46,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,96,46,50,14
+END

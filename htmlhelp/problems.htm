@@ -1,0 +1,28 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<HTML>
+<HEAD>
+<meta name="GENERATOR" content="Microsoft&reg; HTML Help Workshop 4.1">
+<Title>Problems</Title>
+</HEAD>
+<BODY>
+<H1>Problems</H1>
+<P>You can get hangs and premature errors when running scripts with this program.</P>
+<UL>
+	<LI>stdin - some programs hang if their stdin is not redirected</LI>
+	<LI>stderr - programs writing to stderr can be interpreted as an exception</LI>
+</UL>
+<P>Example with git, this needs its stdin redirected</P>
+<PRE>
+( & $env:COMSPEC /C "git log --oneline . &lt;NUL:" ) | Measure-Object
+
+$null | git log --oneline . | Measure-Object
+</PRE>
+<P>Microsoft's C compiler writes information to stderr, this can abort a pipeline, either redirect or use /nologo</P>
+<PRE>
+CL 2>&1 .....
+
+CL /nologo .....
+</PRE>
+As shown, wrapping with $env:COMSPEC lets you put the program in a familiar environment. The goal of this program is collect all output in a single document, whether it came from stdout or stderr, much like a terminal or teletype.
+</BODY>
+</HTML>

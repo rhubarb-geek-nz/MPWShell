@@ -1,0 +1,24 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<HTML>
+<HEAD>
+<meta name="GENERATOR" content="Microsoft&reg; HTML Help Workshop 4.1">
+<Title>Overview</Title>
+</HEAD>
+<BODY>
+<H1>Text Editor based on Notepad with integrated PowerShell</H1>
+<P>This is a minimal editor with an integrated command line shell.</P>
+<P>The program runs with a background PowerShell process. On pressing Control+Enter, either the selected text or the current line is processed as a script. The responses are captured within the text.</P>
+<P>Like Notepad, this has an F5 function to insert the date, the difference is this runs PowerShell's 'Get-Date' and inserts the response.</P>
+<P>The 'Exit' menu option does not exit the process directly, it sends 'Exit' as a script to PowerShell.</P>
+<P>Each window is paired with its own runspace to provide isolated contexts. The processes finish when all windows are closed.</P>
+<P>Use Control+Break to stop a running pipeline. For example, type the following along with Control+Enter.</P>
+<PRE>
+Start-Sleep 100
+</PRE>
+This shows the busy cursor while waiting, press Control+Break.
+<PRE>
+Exception: The pipeline has been stopped.
+</PRE>
+Everything else should either be familiar or easy to work out.
+</BODY>
+</HTML>

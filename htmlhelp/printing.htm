@@ -1,0 +1,28 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<HTML>
+<HEAD>
+<meta name="GENERATOR" content="Microsoft&reg; HTML Help Workshop 4.1">
+<Title>Printing</Title>
+</HEAD>
+<BODY>
+<H1>Printing</H1>
+<P>PowerShell provides the ability to print text documents, see</P>
+<UL>
+	<LI>Get-Printer - for listing available printers and determining their names</LI>
+	<LI>Out-Printer - print to a specific printer</LI>
+</UL>
+<P>Example</P>
+<PRE>
+Get-Printer
+
+Name                           ComputerName    Type         DriverName                PortName        Shared   Published
+----                           ------------    ----         ----------                --------        ------   ---------
+OneNote (Desktop)                              Local        Send to Microsoft OneNot… nul:            False    False    
+Microsoft XPS Document Writer                  Local        Microsoft XPS Document W… PORTPROMPT:     False    False    
+Microsoft Print to PDF                         Local        Microsoft Print To PDF    PORTPROMPT:     False    False    
+Fax                                            Local        Microsoft Shared Fax Dri… SHRFAX:         False    False    
+
+Get-Content -LiteralPath 'readme.txt' | Out-Printer -Name 'Microsoft Print to PDF'
+</PRE>
+</BODY>
+</HTML>
