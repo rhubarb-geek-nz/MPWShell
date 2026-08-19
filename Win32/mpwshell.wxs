@@ -60,19 +60,19 @@
         <File Id="MPWShell.chm" KeyPath="yes" Source="htmlhelp\MPWShell.chm" />
       </Component>
       <Component Id="ToolServer.dll" Guid="*" Directory="INSTALLDIR5" Win64="$(var.MSIIS64BIT)">
-        <File Id="RhubarbGeekNz.ToolServer.dll" KeyPath="yes" Source="ToolServerPS\bin\Release\netstandard2.0\publish\RhubarbGeekNz.ToolServer.dll" />
+        <File Id="RhubarbGeekNz.ToolServer.dll" KeyPath="yes" Source="..\ToolServerPS\bin\Release\netstandard2.0\publish\RhubarbGeekNz.ToolServer.dll" />
         <RegistryValue Id="ToolServer" Root="HKLM" Key="SOFTWARE\rhubarb-geek-nz\MPW Shell" Name="ToolServer" Value="PowerShell.exe -NoProfile -NoLogo -NonInteractive -Command $ErrorActionPreference='Stop'; Import-Module '[INSTALLDIR5]rhubarb-geek-nz.ToolServer.psd1' ; Invoke-MPWShell.ToolServer -Protocol 0c63fba6-7c2a-4b72-8de0-b3bd579dedaa" Type="string" Action="write" />
         <RegistryValue Id="TextLimit" Root="HKLM" Key="SOFTWARE\rhubarb-geek-nz\MPW Shell" Name="TextLimit" Value="1048576" Type="integer" Action="write" />
         <RegistryValue Id="InitialScript" Root="HKLM" Key="SOFTWARE\rhubarb-geek-nz\MPW Shell" Name="InitialScript" Value="if ($PSStyle) { $PSStyle.OutputRendering = 'PlainText' } ; Import-Module '[INSTALLDIR3]rhubarb-geek-nz.MPWShell.psd1'" Type="string" Action="write" />
       </Component>
       <Component Id="ToolServer.psd1" Guid="*" Directory="INSTALLDIR5" Win64="$(var.MSIIS64BIT)">
-        <File Id="ToolServer.psd1" KeyPath="yes" Source="ToolServerPS\bin\Release\netstandard2.0\publish\rhubarb-geek-nz.ToolServer.psd1" />
+        <File Id="ToolServer.psd1" KeyPath="yes" Source="..\ToolServerPS\bin\Release\netstandard2.0\publish\rhubarb-geek-nz.ToolServer.psd1" />
       </Component>
       <Component Id="MPWShell.dll" Guid="*" Directory="INSTALLDIR3" Win64="$(var.MSIIS64BIT)">
-        <File Id="MPWShell.dll" KeyPath="yes" Source="MPWShellPS\bin\Release\netstandard2.0\publish\RhubarbGeekNz.MPWShell.dll" />
+        <File Id="MPWShell.dll" KeyPath="yes" Source="..\MPWShellPS\bin\Release\netstandard2.0\publish\RhubarbGeekNz.MPWShell.dll" />
       </Component>
       <Component Id="MPWShell.psd1" Guid="*" Directory="INSTALLDIR3" Win64="$(var.MSIIS64BIT)">
-        <File Id="MPWShell.psd1" KeyPath="yes" Source="MPWShellPS\bin\Release\netstandard2.0\publish\rhubarb-geek-nz.MPWShell.psd1" />
+        <File Id="MPWShell.psd1" KeyPath="yes" Source="..\MPWShellPS\bin\Release\netstandard2.0\publish\rhubarb-geek-nz.MPWShell.psd1" />
       </Component>
     </ComponentGroup>
   </Fragment>

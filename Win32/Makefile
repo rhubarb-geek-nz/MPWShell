@@ -1,4 +1,4 @@
-SRCDIR=Win32
+SRCDIR=.
 CL=cl
 OBJDIR=obj\$(VSCMD_ARG_TGT_ARCH)
 BINDIR=bin\$(VSCMD_ARG_TGT_ARCH)
@@ -6,13 +6,18 @@ BUNDLE=bundle
 RESFILE=$(OBJDIR)\mpwshell.res
 APP=$(BINDIR)\mpwshell.exe
 MSI=MPWShell-$(mpwshell_STR3)-$(VSCMD_ARG_TGT_ARCH).msi
+MSIX=$(BUNDLE)\MPWShell-$(mpwshell_STR3)-$(VSCMD_ARG_TGT_ARCH).msix
+MSIXBUNDLE=MPWShell-$(mpwshell_STR3).msixbundle
 CHM=htmlhelp\mpwshell.chm
 SRC=$(SRCDIR)\mpwshell.c
 
-all: $(APP) $(MSI)
+all: $(APP) $(MSI) $(MSIX)
 	
 clean: 
 	if exist $(APP) del $(APP)
+	if exist $(MSI) del $(MSI)
+	if exist $(MSIX) del $(MSIX)
+	if exist $(MSIXBUNDLE) del $(MSIXBUNDLE)
 	if exist $(OBJDIR)\*.obj del $(OBJDIR)\*.obj
 	if exist $(OBJDIR)\*.res del $(OBJDIR)\*.res
 	if exist $(OBJDIR) rmdir $(OBJDIR)
@@ -67,3 +72,17 @@ $(MSI): $(APP) $(CHM) "mpwshell.wxs"
 	del "mpwshell.wixobj"
 	del "mpwshell-$(mpwshell_STR3)-$(VSCMD_ARG_TGT_ARCH).wixpdb"
 	signtool sign /sha1 "$(CertificateThumbprint)" /fd SHA256 /t http://timestamp.digicert.com $@
+
+$(MSIXBUNDLE):
+	makeappx bundle /d $(BUNDLE) /p $@
+	signtool sign /sha1 "$(BundleThumbprint)" /fd SHA256 /t http://timestamp.digicert.com $@
+
+$(MSIX): $(BUNDLE) $(APP) $(CHM)
+	COPY /Y $(APP)
+	COPY /Y $(CHM)
+	DIR mpwshell.exe
+	DIR mpwshell.chm
+	makeappx pack /m AppxManifest.xml /f mapping.ini /p $@
+	DEL mpwshell.exe
+	DEL mpwshell.chm
+	signtool sign /sha1 "$(BundleThumbprint)" /fd SHA256 /t http://timestamp.digicert.com $@
