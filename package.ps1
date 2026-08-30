@@ -1,3 +1,7 @@
+#!/usr/bin/env pwsh
+# Copyright (c) 2026 Roger Brown.
+# Licensed under the MIT License.
+
 param(
 	$CertificateThumbprint = '601A8B683F791E51F647D34AD102C38DA4DDB65F',
 	$BundleThumbprint = '5F88DFB53180070771D4507244B2C9C622D741F8'
@@ -10,6 +14,8 @@ trap
 {
 	throw $PSItem
 }
+
+$Env:DOTNET_CLI_TELEMETRY_OPTOUT='1'
 
 [int]$VersionNumber = $null | git log --oneline . | Measure-Object | ForEach-Object { $_.Count }
 $VersionNumberHex = $VersionNumber.ToString('X8')
@@ -33,7 +39,7 @@ foreach ($project in 'ToolServerPS', 'MPWShellPS')
 		{
 			if (Test-Path -LiteralPath $dir -PathType Container)
 			{
-				Remove-Item $dir -Recurse
+				Remove-Item -LiteralPath $dir -Recurse -Force
 			}
 		}
 
@@ -42,6 +48,41 @@ foreach ($project in 'ToolServerPS', 'MPWShellPS')
 		if ($LastExitCode)
 		{
 			throw $LastExitCode
+		}
+	}
+	finally
+	{
+		Pop-Location
+	}
+}
+
+if ($IsLinux)
+{
+	Push-Location -LiteralPath 'Motif'
+
+	try
+	{
+		$uname = uname
+
+		$CFLAGS = ""
+
+		if ($uname -eq 'FreeBSD')
+		{
+			$CFLAGS = 'CFLAGS="-Wall -Werror -I/usr/local/include -L/usr/local/lib"'
+		}
+
+		sh -c "make clean"
+
+		if ($LastExitCode)
+		{
+			throw "LastExitCode $LastExitCode"
+		}
+
+		sh -c "make MPWSHELL_VERSION=$Version $CFLAGS dist"
+
+		if ($LastExitCode)
+		{
+			throw "LastExitCode $LastExitCode"
 		}
 	}
 	finally
@@ -65,6 +106,8 @@ if ($IsWindows -or ( 'Desktop' -eq $PSEdition ))
 				Remove-Item -LiteralPath $DIR -Force -Recurse
 			}
 		}
+
+		Get-Content -LiteralPath 'mpwshell.rc' | Set-Content  -LiteralPath 'mpwshell.unicode.rc' -Encoding Unicode
 
 		Push-Location -LiteralPath 'HtmlHelp'
 

@@ -14,7 +14,7 @@
 		ProcessorArchitecture="$(VSCMD_ARG_TGT_ARCH)"
 	/>
 	<Properties>
-		<DisplayName>mpwshell</DisplayName>
+		<DisplayName>MPW Shell</DisplayName>
 		<PublisherDisplayName>rhubarb-geek-nz</PublisherDisplayName>
 		<Description>Text Editor with PowerShell</Description>
 		<Logo>assets\StoreLogo.png</Logo>

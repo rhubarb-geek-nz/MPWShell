@@ -1,13 +1,12 @@
 ﻿// Copyright (c) 2026 Roger Brown.
 // Licensed under the MIT License.
 
-using System;
-using System.Text;
 using RhubarbGeekNz.MPWShell.ToolServer;
+using System;
 
 namespace RhubarbGeekNz.ToolServer
 {
-	internal class Progream
+	internal class Program
 	{
 		internal static void Main(string [] args)
 		{

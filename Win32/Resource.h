@@ -15,6 +15,7 @@
 #define IDS_SAVEFILE                    113
 #define IDS_SAVEFILTER                  114
 #define IDS_SENDFEEDBACKURL             115
+#define IDS_CONSOLEEXITCODE             116
 #define IDM_HELP_VIEWHELP               130
 #define IDD_GOTO                        130
 #define IDM_HELP_SENDFEEDBACK           131

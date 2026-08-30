@@ -7,7 +7,7 @@
 #define MPWSHELL_DEFAULT_STOCK_FONT ANSI_FIXED_FONT
 
 static LPCWSTR szTitle, szWindowClass, szGoingToFar, szInitialScript,
-    szCannotFindFile, szTitleWithFile, szSaveFile, szSaveContent, szSaveFilter, szSendFeedbackURL;
+    szCannotFindFile, szTitleWithFile, szSaveFile, szSaveContent, szSaveFilter, szSendFeedbackURL, szConsoleExitCode;
 static NONCLIENTMETRICSW NonClientMetrics = {sizeof(NONCLIENTMETRICSW)};
 static HCURSOR hWaitCursor, hArrowCursor, hCaretCursor;
 static LPCWSTR registryKey = L"SOFTWARE\\rhubarb-geek-nz\\MPW Shell";
@@ -32,15 +32,16 @@ struct CHARBUF
 struct APPDATA
 {
     HINSTANCE hInstance;
-    HANDLE hReadThread, hWriteThread, hWriteEvent, hPipeRead, hPipeWrite;
+    HICON hIcon;
+    HANDLE hReadThread, hWriteThread, hWriteEvent, hErrorThread, hPipeRead, hPipeWrite, hConsoleEvent, hPipeError;
     PROCESS_INFORMATION processInfo;
-    DWORD tidReadThread, tidWriteThread, clientSequence;
+    DWORD tidReadThread, tidWriteThread, tidErrorThread, clientSequence, exitCode;
     struct WINDATA* first;
     BOOL bRunning;
     CRITICAL_SECTION crit;
     int fileCodePage;
     LOGFONTW logFont;
-    BOOL hasLogFont;
+    BOOL hasLogFont, bAllocConsole;
     struct CHARBUF* writeQueue;
 };
 
@@ -68,6 +69,75 @@ struct WINDATA
 };
 
 static struct APPDATA appData;
+
+static BOOL CALLBACK ConsoleCtrlHandler(DWORD what)
+{
+    switch (what)
+    {
+    case CTRL_BREAK_EVENT:
+    case CTRL_C_EVENT:
+    case CTRL_CLOSE_EVENT:
+        EnterCriticalSection(&appData.crit);
+        if (appData.bAllocConsole)
+        {
+            appData.bAllocConsole = FALSE;
+            SetEvent(appData.hConsoleEvent);
+            FreeConsole();
+            SetConsoleCtrlHandler(ConsoleCtrlHandler, FALSE);
+        }
+        LeaveCriticalSection(&appData.crit);
+        break;
+    }
+
+    return TRUE;
+}
+
+static void ConsoleWrite(struct APPDATA *app, int which, void* data, DWORD len)
+{
+    if (len)
+    {
+        EnterCriticalSection(&app->crit);
+
+        if (!app->bAllocConsole)
+        {
+            app->bAllocConsole = AllocConsole();
+
+            if (app->bAllocConsole)
+            {
+                if (SetConsoleCtrlHandler(ConsoleCtrlHandler, TRUE) && szTitle)
+                {
+                    HANDLE hOutput = GetStdHandle(which);
+                    DWORD mode;
+                    HWND hWnd = GetConsoleWindow();
+                    SetConsoleTitleW(szTitle);
+                    if (hWnd)
+                    {
+                        HMENU hMenu = GetSystemMenu(hWnd, FALSE);
+                        SendMessage(hWnd, WM_SETICON, 0, (LPARAM)app->hIcon);
+                        if (hMenu)
+                        {
+                            EnableMenuItem(hMenu, SC_CLOSE, MF_BYCOMMAND | MF_GRAYED);
+                        }
+                    }
+                    if (GetConsoleMode(hOutput, &mode))
+                    {
+                        if (!(mode & ENABLE_VIRTUAL_TERMINAL_PROCESSING))
+                        {
+                            SetConsoleMode(hOutput, mode | ENABLE_VIRTUAL_TERMINAL_PROCESSING);
+                        }
+                    }
+                }
+            }
+        }
+
+        if (app->bAllocConsole)
+        {
+            WriteFile(GetStdHandle(which), data, len, &len, NULL);
+        }
+
+        LeaveCriticalSection(&app->crit);
+    }
+}
 
 static void QueueWriteMessage(struct APPDATA* appData, struct WINDATA* winData, struct CHARBUF* output)
 {
@@ -268,20 +338,83 @@ static DWORD WINAPI WriteThread(LPVOID  pv)
     return 0;
 }
 
-static const char* magicPrefix = "0c63fba6-7c2a-4b72-8de0-b3bd579dedaa";
-static const char* magicCRLF = "\r\n";
+static DWORD CALLBACK ErrorThread(LPVOID pv)
+{
+    struct APPDATA* appData = pv;
+
+    while (TRUE)
+    {
+        DWORD len = 0;
+        BYTE buf[4096];
+
+        if (ReadFile(appData->hPipeError, buf, sizeof(buf), &len, NULL) && len)
+        {
+            ConsoleWrite(appData, STD_ERROR_HANDLE, buf, len);
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    if (appData->processInfo.hProcess)
+    {
+        DWORD procExitCode = 0;
+
+        WaitForSingleObject(appData->processInfo.hProcess, INFINITE);
+
+        if (GetExitCodeProcess(appData->processInfo.hProcess, &procExitCode))
+        {
+            appData->exitCode = procExitCode;
+
+            if (appData->bAllocConsole)
+            {
+                WCHAR buf[256];
+                DWORD dw;
+                int i = _snwprintf_s(buf,
+                    sizeof(buf) / sizeof(buf[0]),
+                    (sizeof(buf) / sizeof(buf[0])) - 1,
+                    szConsoleExitCode, procExitCode);
+                WriteConsoleW(GetStdHandle(STD_ERROR_HANDLE), buf, i, &dw, NULL);
+            }
+
+            return procExitCode;
+        }
+    }
+
+    return 0;
+}
+
+static const DWORD prefixLength = 36;
+
+static BOOL isPrefixAtEndWithNewline(const char* data, DWORD len)
+{
+    if (data[0] != 0xA) return 0;
+
+    if (data[-1] == 0xD)
+    {
+        data--;
+        len--;
+    }
+
+    if (len < prefixLength)
+    {
+        return 0;
+    }
+
+    return memcmp(data - prefixLength, "0c63fba6-7c2a-4b72-8de0-b3bd579dedaa", prefixLength) ? 0 : 1;
+}
 
 static BOOL ReadThreadSignature(struct APPDATA *appData)
 {
 	BOOL bFoundHeader = FALSE;
     char buf[4097];
     DWORD bufLen = 0;
-    DWORD magicPrefixLen = (DWORD)strlen(magicPrefix);
 
     while (appData->bRunning && !bFoundHeader)
     {
         DWORD dwLen = 0;
-        const char* lastCRLF = NULL;
+        const char* lastLF = NULL;
         const char* p = buf;
         DWORD amountToSend = 0;
 
@@ -303,103 +436,57 @@ static BOOL ReadThreadSignature(struct APPDATA *appData)
 
         while (p)
         {
-            p = strstr(p, magicCRLF);
+            p = strchr(p, 0x0A);
 
             if (p)
             {
-                lastCRLF = p;
+                lastLF = p;
                 p += 2;
             }
         }
 
-        if (lastCRLF)
+        if (lastLF)
         {
-            size_t lastOffset = lastCRLF - buf;
+            DWORD lastOffset = (DWORD)(lastLF - buf);
 
-            if (lastOffset >= magicPrefixLen)
+            if (lastOffset >= prefixLength)
             {
-                if (lastOffset == (bufLen - 2))
+                if (isPrefixAtEndWithNewline(lastLF, lastOffset))
                 {
-                    if (!memcmp(buf + lastOffset - magicPrefixLen, magicPrefix, magicPrefixLen))
+                    bFoundHeader = TRUE;
+                    bufLen -= prefixLength + 1;
+                    if (lastLF[-1] == 0x0D)
                     {
-                        bFoundHeader = TRUE;
-                        bufLen -= magicPrefixLen + 2;
-                        amountToSend = bufLen;
+                        bufLen--;
                     }
-                    else
-                    {
-                        amountToSend = (DWORD)(lastOffset + 2);
-                    }
+                    amountToSend = bufLen;
                 }
                 else
                 {
-                    amountToSend = (DWORD)(lastOffset - magicPrefixLen);
+                    amountToSend = lastOffset + 1;
                 }
             }
         }
         else
         {
-            if (bufLen > (magicPrefixLen + 2))
+            if (bufLen > (prefixLength + 2))
             {
-                amountToSend = bufLen - magicPrefixLen - 2;
+                amountToSend = bufLen - prefixLength - 2;
             }
         }
 
         if (amountToSend)
         {
-            int j = MultiByteToWideChar(CP_ACP, 0, buf, amountToSend, NULL, 0);
+            ConsoleWrite(appData, STD_OUTPUT_HANDLE, buf, amountToSend);
 
-            if (j > 0)
+            if (amountToSend == bufLen)
             {
-                struct CHARBUF* p = LocalAlloc(LMEM_ZEROINIT, sizeof(*p) + (j + 2) * sizeof(p->buf[0]));
-
-                if (p)
-                {
-                    p->dwLen = MultiByteToWideChar(CP_ACP, 0, buf, amountToSend, p->buf, j);
-                    p->msgType = 0x46;
-
-                    if (amountToSend == bufLen)
-                    {
-                        bufLen = 0;
-                    }
-                    else
-                    {
-                        bufLen -= amountToSend;
-                        memmove(buf, buf + amountToSend, bufLen);
-                    }
-
-                    EnterCriticalSection(&appData->crit);
-
-                    struct WINDATA* winData = appData->first;
-
-                    if (winData)
-                    {
-                        if (winData->readQueue)
-                        {
-                            struct CHARBUF* q = winData->readQueue;
-
-                            while (q->next) q = q->next;
-
-                            q->next = p;
-                        }
-                        else
-                        {
-                            winData->readQueue = p;
-                        }
-
-                        PostMessage(winData->hWnd, WM_USER, 0, 0);
-                    }
-
-                    LeaveCriticalSection(&appData->crit);
-                }
-                else
-                {
-                    break;
-                }
+                bufLen = 0;
             }
             else
             {
-                break;
+                bufLen -= amountToSend;
+                memmove(buf, buf + amountToSend, bufLen);
             }
         }
     }
@@ -1007,13 +1094,11 @@ static BOOL InitInstance(HINSTANCE hInstance)
 
     b = CreatePipe(&appData.hPipeRead, &startup.hStdOutput, &saAttr, 4096);
     b = CreatePipe(&startup.hStdInput, &appData.hPipeWrite, &saAttr, 4096);
-
-    b = DuplicateHandle(GetCurrentProcess(), startup.hStdOutput,
-        GetCurrentProcess(), &startup.hStdError,
-        DUPLICATE_SAME_ACCESS, TRUE, DUPLICATE_SAME_ACCESS);
+    b = CreatePipe(&appData.hPipeError, &startup.hStdError, &saAttr, 4096);
 
     b = SetHandleInformation(appData.hPipeRead, HANDLE_FLAG_INHERIT, 0);
     b = SetHandleInformation(appData.hPipeWrite, HANDLE_FLAG_INHERIT, 0);
+    b = SetHandleInformation(appData.hPipeError, HANDLE_FLAG_INHERIT, 0);
 
     startup.dwFlags = STARTF_USESTDHANDLES;
 
@@ -1023,12 +1108,7 @@ static BOOL InitInstance(HINSTANCE hInstance)
     CloseHandle(startup.hStdOutput);
     CloseHandle(startup.hStdError);
 
-    if (!b)
-    {
-        return b;
-    }
-
-    return TRUE;
+    return b;
 }
 
 static BOOL CALLBACK AboutChildren(HWND hWnd, LPARAM lParam)
@@ -2689,7 +2769,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
     return 0;
 }
 
-static ATOM MyRegisterClass(HINSTANCE hInstance)
+static ATOM AppRegisterClass(struct APPDATA *appData)
 {
     WNDCLASSEXW wcex;
 
@@ -2705,13 +2785,13 @@ static ATOM MyRegisterClass(HINSTANCE hInstance)
     wcex.lpfnWndProc = WndProc;
     wcex.cbClsExtra = 0;
     wcex.cbWndExtra = 0;
-    wcex.hInstance = hInstance;
-    wcex.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_MPWSHELL));
+    wcex.hInstance = appData->hInstance;
+    wcex.hIcon = appData->hIcon;
     wcex.hCursor = hArrowCursor;
     wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
     wcex.lpszMenuName = MAKEINTRESOURCEW(IDC_MPWSHELL);
     wcex.lpszClassName = szWindowClass;
-    wcex.hIconSm = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_MPWSHELL));
+    wcex.hIconSm = appData->hIcon;
 
     return RegisterClassExW(&wcex);
 }
@@ -2735,12 +2815,13 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     _In_ int       nCmdShow)
 {
     int argc = 0;
-    int exitCode = 0;
     LPWSTR* argv = NULL;
 
     appData.hInstance = hInstance;
     appData.fileCodePage = GetACP();
     appData.clientSequence = 1 + (GetTickCount() & 0xFFFFFF);
+    appData.hConsoleEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
+    appData.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_MPWSHELL));
 
     if (!appData.fileCodePage)
     {
@@ -2758,8 +2839,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     szSaveContent = LoadResourceString(IDS_SAVECONTENT);
     szSaveFilter = LoadResourceString(IDS_SAVEFILTER);
     szSendFeedbackURL = LoadResourceString(IDS_SENDFEEDBACKURL);
+    szConsoleExitCode = LoadResourceString(IDS_CONSOLEEXITCODE);
 
-    MyRegisterClass(hInstance);
+    AppRegisterClass(&appData);
 
     if (lpCmdLine && lpCmdLine[0])
     {
@@ -2793,18 +2875,25 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
                         WCHAR buf[MAX_PATH];
 
-                        if (!ExpandEnvironmentStringsW(p, buf, sizeof(buf)/sizeof(buf[0])))
+                        if (!wcscmp(p,L"~")) // Don't expand strings on normal command line usage, that is parent shell's job
                         {
-                            DWORD dwLastError = GetLastError();
+                            if (GetEnvironmentVariableW(L"USERPROFILE", buf, sizeof(buf) / sizeof(buf[0])))
+                            {
+                                p = buf;
+                            }
+                            else
+                            {
+                                DWORD dwLastError = GetLastError();
 
-                            ShowError(dwLastError);
+                                ShowError(dwLastError);
 
-                            return 1;
+                                return 1;
+                            }
                         }
 
                         argc--;
 
-                        if (!SetCurrentDirectoryW(buf))
+                        if (!SetCurrentDirectoryW(p))
                         {
                             DWORD dwLastError = GetLastError();
 
@@ -2837,6 +2926,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
         return dwLastError;
     }
+
+    appData.hErrorThread = CreateThread(NULL, 0, ErrorThread, &appData, 0, &appData.tidErrorThread);
 
     if (argc)
     {
@@ -2901,10 +2992,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                 TranslateMessage(&msg);
                 DispatchMessage(&msg);
             }
-
         }
-
-        exitCode = (int)msg.wParam;
     }
 
     EnterCriticalSection(&appData.crit);
@@ -2930,17 +3018,43 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         CloseHandle(appData.hPipeRead);
     }
 
-    if (appData.processInfo.hProcess)
+    if (appData.tidErrorThread)
     {
-        DWORD procExitCode = 0;
+        DWORD exitCode;
 
-        WaitForSingleObject(appData.processInfo.hProcess, INFINITE);
+        WaitForSingleObject(appData.hErrorThread, INFINITE);
 
-        if (!GetExitCodeProcess(appData.processInfo.hProcess, &procExitCode))
+        if (GetExitCodeThread(appData.hErrorThread, &exitCode))
         {
-            exitCode = (int)procExitCode;
+            appData.exitCode = exitCode;
         }
     }
 
-    return exitCode;
+    EnterCriticalSection(&appData.crit);
+
+    if (appData.bAllocConsole)
+    {
+        HWND hWnd = GetConsoleWindow();
+
+        if (hWnd)
+        {
+            HMENU hMenu = GetSystemMenu(hWnd, FALSE);
+
+            if (hMenu)
+            {
+                EnableMenuItem(hMenu, SC_CLOSE, MF_BYCOMMAND | MF_ENABLED);
+            }
+        }
+    }
+
+    while (appData.bAllocConsole)
+    {
+        LeaveCriticalSection(&appData.crit);
+        WaitForSingleObject(appData.hConsoleEvent, INFINITE);
+        EnterCriticalSection(&appData.crit);
+    }
+
+    LeaveCriticalSection(&appData.crit);
+
+    return (int)appData.exitCode;
 }

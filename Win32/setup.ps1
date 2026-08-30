@@ -1,6 +1,8 @@
 # Copyright (c) 2026 Roger Brown.
 # Licensed under the MIT License.
 
+param( [switch]$remove )
+
 $ErrorActionPreference = 'Stop'
 
 # MPW Shell starts the PowerShell tool server using these registry entries.
@@ -29,7 +31,7 @@ if (-not $name)
 
 $tool = "`"$name`" -NoProfile -NoLogo -NonInteractive -Command Invoke-MPWShell.ToolServer -Protocol 0c63fba6-7c2a-4b72-8de0-b3bd579dedaa"
 
-$initial = "Set-Location `$HOME; if (`$PSStyle) { `$PSStyle.OutputRendering = 'PlainText' }; Import-Module rhubarb-geek-nz.MPWShell"
+$initial = "if (`$PSStyle) { `$PSStyle.OutputRendering = 'PlainText' }; Import-Module rhubarb-geek-nz.MPWShell"
 
 # ensure the key exists for the current user
 
@@ -55,14 +57,24 @@ $properties = @{
 
 foreach ($property in $properties)
 {
-	try
+	if ($remove)
 	{
-		$null = Get-ItemProperty -Path $RegistryPath -Name $property.Name
+		Remove-ItemProperty -Path $RegistryPath -Name $property.Name
 	}
-	catch
+	else
 	{
-		$null = New-ItemProperty -Path $RegistryPath @property
+		try
+		{
+			$null = Get-ItemProperty -Path $RegistryPath -Name $property.Name
+		}
+		catch
+		{
+			$null = New-ItemProperty -Path $RegistryPath @property
+		}
 	}
 }
 
-$properties | ForEach-Object { [pscustomobject]@{ Name = $_.Name ; Value = Get-ItemPropertyValue -Path $RegistryPath -Name $_.Name } } | Format-Table
+if (-not $remove)
+{
+	$properties | ForEach-Object { [pscustomobject]@{ Name = $_.Name ; Value = Get-ItemPropertyValue -Path $RegistryPath -Name $_.Name } } | Format-Table
+}

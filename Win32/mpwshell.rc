@@ -1,4 +1,4 @@
-// Copyright (c) 2026 Roger Brown.
+ï»¿// Copyright (c) 2026 Roger Brown.
 // Licensed under the MIT License.
 
 #include "Resource.h"
@@ -7,7 +7,6 @@
 #include "windows.h"
 
 LANGUAGE LANG_ENGLISH, SUBLANG_NEUTRAL
-#pragma code_page(1252)
 
 IDI_MPWSHELL            ICON                    "mpwshell.ico"
 
@@ -17,9 +16,9 @@ BEGIN
     BEGIN
         MENUITEM "&New\tCtrl+N",                IDM_FILE_NEW,MFT_STRING,MFS_ENABLED
         MENUITEM MFT_SEPARATOR
-        MENUITEM "&Open…\tCtrl+O",              IDM_FILE_OPEN,MFT_STRING,MFS_GRAYED
+        MENUITEM "&Openâ€¦\tCtrl+O",              IDM_FILE_OPEN,MFT_STRING,MFS_GRAYED
         MENUITEM "&Save\tCtrl+S",               IDM_FILE_SAVE,MFT_STRING,MFS_GRAYED
-        MENUITEM "Save &As…\tCtrl+Shift+S",     IDM_FILE_SAVEAS,MFT_STRING,MFS_GRAYED
+        MENUITEM "Save &Asâ€¦\tCtrl+Shift+S",     IDM_FILE_SAVEAS,MFT_STRING,MFS_GRAYED
         MENUITEM MFT_SEPARATOR
         MENUITEM "E&xit",                       IDM_EXIT,MFT_STRING,MFS_ENABLED
     END
@@ -32,11 +31,11 @@ BEGIN
         MENUITEM "&Paste\tCtrl+V",              IDM_EDIT_PASTE,MFT_STRING,MFS_ENABLED
         MENUITEM "De&lete\tDel",                IDM_EDIT_DELETE,MFT_STRING,MFS_ENABLED
         MENUITEM MFT_SEPARATOR
-        MENUITEM "&Find…\tCtrl+F",              IDM_EDIT_FIND,MFT_STRING,MFS_GRAYED
+        MENUITEM "&Findâ€¦\tCtrl+F",              IDM_EDIT_FIND,MFT_STRING,MFS_GRAYED
         MENUITEM "Find &Next\tF3",              IDM_EDIT_FINDNEXT,MFT_STRING,MFS_GRAYED
         MENUITEM "Find Pre&vious\tShift+F3",    IDM_EDIT_FINDPREVIOUS,MFT_STRING,MFS_GRAYED
-        MENUITEM "&Replace…\tCtrl+H",           IDM_EDIT_REPLACE,MFT_STRING,MFS_GRAYED
-        MENUITEM "&Go To…\tCtrl+G",             IDM_EDIT_GOTO,MFT_STRING,MFS_GRAYED
+        MENUITEM "&Replaceâ€¦\tCtrl+H",           IDM_EDIT_REPLACE,MFT_STRING,MFS_GRAYED
+        MENUITEM "&Go Toâ€¦\tCtrl+G",             IDM_EDIT_GOTO,MFT_STRING,MFS_GRAYED
         MENUITEM MFT_SEPARATOR
         MENUITEM "Select &All",                 IDM_EDIT_SELECTALL,MFT_STRING,MFS_ENABLED
         MENUITEM "Time/&Date\tF5",              IDM_EDIT_TIME,MFT_STRING,MFS_ENABLED
@@ -44,7 +43,7 @@ BEGIN
     POPUP "&Format",                        65535,MFT_STRING,MFS_ENABLED
     BEGIN
         MENUITEM "Word Wrap",                   IDM_FORMAT_WORDWRAP,MFT_STRING,MFS_ENABLED
-        MENUITEM "Font…",                       IDM_FORMAT_FONT,MFT_STRING,MFS_ENABLED
+        MENUITEM "Fontâ€¦",                       IDM_FORMAT_FONT,MFT_STRING,MFS_ENABLED
     END
     POPUP "&View",                          65535,MFT_STRING,MFS_ENABLED
     BEGIN
@@ -58,7 +57,7 @@ BEGIN
     END
     POPUP "&Help",                          65535,MFT_STRING | MFT_RIGHTJUSTIFY,MFS_ENABLED
     BEGIN
-        MENUITEM "View &Help",                  IDM_HELP_VIEWHELP,MFT_STRING,MFS_ENABLED
+        MENUITEM "View &Help\tF1",              IDM_HELP_VIEWHELP,MFT_STRING,MFS_ENABLED
         MENUITEM "Send &Feedback",              IDM_HELP_SENDFEEDBACK,MFT_STRING,MFS_ENABLED
         MENUITEM MFT_SEPARATOR
         MENUITEM "&About MPW Shell",            IDM_ABOUT,MFT_STRING,MFS_ENABLED
@@ -83,7 +82,7 @@ BEGIN
             VALUE "FileDescription", "Text Editor based on Notepad\0"
             VALUE "FileVersion", mpwshell_STR4
             VALUE "InternalName", "mpwshell\0"
-            VALUE "LegalCopyright", "© Roger Brown. 2026\0"
+            VALUE "LegalCopyright", "Â© Roger Brown. 2026\0"
             VALUE "OriginalFilename", "MPWShell.exe\0"
             VALUE "ProductName", "mpwshell\0"
             VALUE "ProductVersion", mpwshell_STR4
@@ -113,6 +112,7 @@ BEGIN
     VK_SUBTRACT,    IDM_ZOOM_ZOOMOUT,       VIRTKEY, CONTROL
     VK_NUMPAD0,     IDM_ZOOM_RESTOREDEFAULT, VIRTKEY, CONTROL
     VK_RETURN,      IDM_EXECUTE_SCRIPT,     VIRTKEY, CONTROL
+    VK_F1,          IDM_HELP_VIEWHELP,      VIRTKEY
     VK_F3,          IDM_EDIT_FINDNEXT,      VIRTKEY 
     VK_F3,          IDM_EDIT_FINDPREVIOUS,  VIRTKEY, SHIFT
     VK_F5,          IDM_EDIT_TIME,          VIRTKEY
@@ -126,7 +126,7 @@ FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
     ICON            IDI_MPWSHELL,IDC_STATIC,14,14,21,20
     LTEXT           "MPW Shell, Version 1.0",IDC_STATIC,42,14,114,8,SS_NOPREFIX
-    LTEXT           "Copyright © 2026",IDC_STATIC,42,26,114,8
+    LTEXT           "Copyright Â© 2026 Roger Brown",IDC_STATIC,42,26,114,8
     DEFPUSHBUTTON   "OK",IDOK,113,41,50,14,WS_GROUP
 END
 
@@ -141,6 +141,7 @@ BEGIN
     IDS_SAVEFILE            "Do you want to save %s?"
     IDS_SAVEFILTER          "Text Files\0*.TXT\0\0"
     IDS_SENDFEEDBACKURL     "https://github.com/rhubarb-geek-nz/MPWShell"
+    IDS_CONSOLEEXITCODE     "ExitCode %08lx\r\n"
 END
 
 IDD_GOTO DIALOGEX 0, 0, 154, 70

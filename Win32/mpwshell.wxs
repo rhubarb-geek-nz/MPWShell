@@ -23,7 +23,7 @@
                   Name="MPW Shell"
                   Description="MPW Shell for $(var.MSIARCH)"
                   Target="[INSTALLDIR]\MPWShell.exe"
-                  Arguments="-WorkingDirectory %USERPROFILE%"
+                  Arguments="-WorkingDirectory ~"
                   WorkingDirectory="INSTALLDIR"/>
         <RemoveFolder Id="CleanUpShortCut" Directory="ApplicationProgramsFolder" On="uninstall"/>
         <RegistryValue Root="HKCU" Key="Software\rhubarb-geek-nz\MPW Shell" Name="installed" Type="integer" Value="1" KeyPath="yes"/>

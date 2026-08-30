@@ -1,4 +1,3 @@
-SRCDIR=.
 CL=cl
 OBJDIR=obj\$(VSCMD_ARG_TGT_ARCH)
 BINDIR=bin\$(VSCMD_ARG_TGT_ARCH)
@@ -9,7 +8,7 @@ MSI=MPWShell-$(mpwshell_STR3)-$(VSCMD_ARG_TGT_ARCH).msi
 MSIX=$(BUNDLE)\MPWShell-$(mpwshell_STR3)-$(VSCMD_ARG_TGT_ARCH).msix
 MSIXBUNDLE=MPWShell-$(mpwshell_STR3).msixbundle
 CHM=htmlhelp\mpwshell.chm
-SRC=$(SRCDIR)\mpwshell.c
+SRC=mpwshell.c
 
 all: $(APP) $(MSI) $(MSIX)
 	
@@ -51,8 +50,8 @@ $(APP): $(SRC) $(OBJDIR) $(BINDIR) $(RESFILE)
 	if exist "$(BINDIR)\mpwshell.lib" del "$(BINDIR)\mpwshell.lib"
 	signtool sign /sha1 "$(CertificateThumbprint)" /fd SHA256 /t http://timestamp.digicert.com $@
 
-$(RESFILE): $(SRCDIR)\mpwshell.rc
-	rc /r $(RCFLAGS) "/Dmpwshell_INT4=$(mpwshell_INT4)" "/Dmpwshell_STR4=\"$(mpwshell_STR4)\"" /fo$@ $(SRCDIR)\mpwshell.rc
+$(RESFILE): mpwshell.unicode.rc
+	rc /r $(RCFLAGS) "/Dmpwshell_INT4=$(mpwshell_INT4)" "/Dmpwshell_STR4=\"$(mpwshell_STR4)\"" /fo$@ mpwshell.unicode.rc
 
 $(OBJDIR) $(BINDIR) $(BUNDLE):
 	mkdir $@

@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package IgnorableNamespaces="uap rescap" xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" xmlns:uap3="http://schemas.microsoft.com/appx/manifest/uap/windows10/3" xmlns:desktop="http://schemas.microsoft.com/appx/manifest/desktop/windows10" xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities">
-  <Identity Name="9611rhubarb.geek.nz.mpwshell" Version="0.9.3.0" Publisher="CN=rhubarb-geek-nz, E=rhubarb-geek-nz@users.sourceforge.net" ProcessorArchitecture="x86" />
+  <Identity Name="9611rhubarb.geek.nz.mpwshell" Version="0.9.4.0" Publisher="CN=rhubarb-geek-nz, E=rhubarb-geek-nz@users.sourceforge.net" ProcessorArchitecture="x86" />
   <Properties>
-    <DisplayName>mpwshell</DisplayName>
+    <DisplayName>MPW Shell</DisplayName>
     <PublisherDisplayName>rhubarb-geek-nz</PublisherDisplayName>
     <Description>Text Editor with PowerShell</Description>
     <Logo>assets\StoreLogo.png</Logo>
