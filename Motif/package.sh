@@ -4,7 +4,7 @@
 
 cleanup()
 {
-	rm -rf data rpms rpm.spec
+	rm -rf data rpms rpm.spec meta
 }
 
 umask 022
@@ -87,7 +87,7 @@ then
 	DPKGARCH=$(dpkg --print-architecture)
 	SIZE=$(du -sk data/usr | while read A B; do echo $A; done)
 	mkdir data/DEBIAN
-	DEPENDS=
+	DEPENDS=powershell
 	for d in $(ldd mpwshell | grep libX | while read A B C D
 		do
 			case "$A" in
@@ -100,12 +100,7 @@ then
 		done
 	)
 	do
-		if test -n "$DEPENDS"
-		then
-			DEPENDS="$DEPENDS, $d"
-		else
-			DEPENDS="$d"
-		fi
+		DEPENDS="$DEPENDS, $d"
 	done
 	cat > data/DEBIAN/control <<EOF
 Package: $PKGNAME
@@ -127,9 +122,11 @@ EOF
 		tar --owner=0 --group=0 --create --gzip --file control.tar.gz -C DEBIAN control
 		tar --owner=0 --group=0 --create --gzip --file data.tar.gz usr/bin/mpwshell
 		echo 2.0 > debian-binary
-		ar r ../"$PKGNAME"_"$VERSION-$IDVERSIONID"_"$DPKGARCH".deb debian-binary control.tar.gz data.tar.gz
+		ar r "$PKGNAME"_"$VERSION-$IDVERSIONID"_"$DPKGARCH".deb debian-binary control.tar.gz data.tar.gz
 		rm -rf DEBIAN control.tar.gz data.tar.gz debian-binary
 	)
+
+	mv data/"$PKGNAME"_"$VERSION-$IDVERSIONID"_"$DPKGARCH".deb .
 fi
 
 if $ISRPM
@@ -145,6 +142,7 @@ Summary: Text Editor based on CDE dtpad with integrated PowerShell
 Name: $PKGNAME
 Version: $VERSION
 Release: 1.$IDVERSIONID
+Requires: powershell
 Group: Applications/System
 License: MIT
 Prefix: /usr/bin
@@ -172,8 +170,10 @@ if $ISFREEBSD
 then
 	(
 		PREFIX=/usr/local
+		mkdir meta
 		
-		cat > MANIFEST <<EOF
+		(
+			cat << EOF
 name $PKGNAME
 version $VERSION
 desc "Text editor based on CDE dtpad integrates PowerShell directly into editor content."
@@ -182,12 +182,31 @@ origin editors/mpwshell
 comment Text Editor based on CDE dtpad with integrated PowerShell
 maintainer $MAINTAINER
 prefix $PREFIX
+licenses: [
+	"MIT"
+]
 EOF
+			echo "deps: {"
+			COMMA=false
+			for d in powershell open-motif libXpm
+			do
+				ORIGIN=$(pkg query "%o" $d)
+				VERS=$(pkg query "%v" $d)
+				if $COMMA
+				then
+					echo ","
+				fi
+				echo -n "	$d: {origin: $ORIGIN, version: $VERS}"
+				COMMA=true
+			done
+			echo
+			echo "}"
+		) > meta/MANIFEST
 
 		mkdir data/usr/local
 		mv data/usr/bin data/usr/local/bin
-		echo bin/mpwshell > PLIST
+		echo bin/mpwshell > meta/PLIST
 
-		pkg create -M MANIFEST -o . -r data -v -p PLIST
+		pkg create -M meta/MANIFEST -o . -r data -v -p meta/PLIST
 	)
 fi

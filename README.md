@@ -23,7 +23,7 @@ The mapping is one document window to one runspace within the tool server. This 
 The program is configurable in terms of how it runs the child tool server. It can be local, remote, PowerShell Desktop or PowerShell Core. It can be a standard installation, a custom build or an app built with the PowerShell SDK.
 
 * Windows - `HKCU:\Software\rhubarb-geek-nz\MPW Shell` values `ToolServer` and `InitialScript`.
-* Motif - X11 resources `MPWShell.toolServer` and `MPWShell.initialScript`.
+* Motif - X11 resources `mpwshell.toolServer` and `mpwshell.initialScript`.
 
 The `ToolServer` property is a command line for running `PowerShell`, this could include using `ssh` to run it on a remote machine. `InitialScript` is run in each runspace when created.
 

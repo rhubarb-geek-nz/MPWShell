@@ -3,7 +3,7 @@
 
 SRC=main.c window.c messages.c ../src/mpwtools.c ../src/mbcs.c
 CFLAGS=-Wall -Werror
-MPWSHELL_VERSION=0.9.4
+MPWSHELL_VERSION=0.9.5
 MPWSHELL_ABOUT="MPW Shell, $(MPWSHELL_VERSION)\nCopyright \xC2\xA9 2026 Roger Brown"
 PREFIX=/usr/local
 
@@ -14,7 +14,7 @@ mpwshell: $(SRC) ../src/mpwtools.h ../src/mbcs.h mpwshell.h mpwshell.xpm Makefil
 
 clean:
 	rm -rf mpwshell
-	rm -rf mpwshell*.deb mpwshell*.rpm
+	rm -rf mpwshell*.deb mpwshell*.rpm mpwshell*.pkg
 
 test: mpwshell
 	./mpwshell

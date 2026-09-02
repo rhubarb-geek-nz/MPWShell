@@ -226,6 +226,40 @@ static void MPWShellSignalCallback(XtPointer client_data, XtSignalId *id)
 	}
 }
 
+static void GetWMProperties(struct MPWShellApp *app)
+{
+	Display *display=app->display;
+	Screen *screen=XDefaultScreenOfDisplay(display);
+	if (XDefaultDepthOfScreen(screen)>1)
+	{
+		Window root = XRootWindowOfScreen(screen);
+		Atom actual_type;
+		int actual_format;
+		unsigned long num_items = 0;
+		unsigned long bytes_after = 0;
+		unsigned char *prop_data = NULL;
+
+		app->_NET_SUPPORTED = XInternAtom(display, "_NET_SUPPORTED", True);
+
+		if (app->_NET_SUPPORTED == None)
+		{
+			return;
+		}
+
+		int status = XGetWindowProperty(display, root, app->_NET_SUPPORTED, 0, 1024, False, XA_ATOM, &actual_type, &actual_format, &num_items, &bytes_after, &prop_data);
+
+		if (status == Success && actual_type == XA_ATOM && actual_format == 32)
+		{
+			app->useColourIcon = 1;
+		}
+
+		if (prop_data)
+		{
+			XFree(prop_data);
+		}
+	}
+}
+
 int main(int argc, char** argv)
 {
 	struct MPWShellApp app;
@@ -245,15 +279,18 @@ int main(int argc, char** argv)
 	XtToolkitInitialize();
 
 	memset(&app, 0, sizeof(app));
+	app.appName = MPWShellBaseName(argv[0],'/');
 	app.appContext = XtCreateApplicationContext();
 	app.toolServer = &client;
-	app.display = XtOpenDisplay(app.appContext, NULL, "MPWShell", "mpwShell", NULL, 0, &argc, argv);
+	app.display = XtOpenDisplay(app.appContext, NULL, app.appName, "MPWShell", NULL, 0, &argc, argv);
 
 	if (!app.display)
 	{
-		fprintf(stderr,"No display\n");
+		fprintf(stderr,"%s: No display\n", app.appName);
 		return 1;
 	}
+
+	GetWMProperties(&app);
 
 	app.WM_DELETE_WINDOW = XInternAtom(app.display, "WM_DELETE_WINDOW", False);
 

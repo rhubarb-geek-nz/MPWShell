@@ -17,6 +17,7 @@
 #include "mpwshell.h"
 #include "mpwshell.xpm"
 #include "mpwshell.xbm"
+#include "mpwshell_m.xbm"
 
 static const char *xmDIALOG_CANCEL_BUTTON = "Cancel";
 static const char *xmDIALOG_HELP_BUTTON = "Help";
@@ -696,20 +697,34 @@ static void CreateMenuBar(struct MPWShellWin *win,struct MenuPopup *popup, int p
 
 int MPWShellWinCreate(struct MPWShellWin *win, const char *file, struct MPWToolServerMessage *msg)
 {
+	struct MPWShellApp *app=win->app;
 	char *textContent=NULL;
 
 	if (file)
 	{
 		int fd;
 		struct stat s;
+		char *filePath = realpath(file, NULL);
+		struct MPWShellWin *other = app->winList;
 
-		win->filePath = realpath(file, NULL);
-
-		if (!win->filePath)
+		if (!filePath)
 		{
 			perror(file);
 			return -1;
 		}
+
+		while (other)
+		{
+			if (other->filePath && !strcmp(other->filePath, filePath))
+			{
+				free(filePath);
+				return -1;
+			}
+
+			other=other->next;
+		}
+
+		win->filePath = filePath;
 
 		win->baseName = MPWShellBaseName(win->filePath, '/');
 
@@ -749,14 +764,14 @@ int MPWShellWinCreate(struct MPWShellWin *win, const char *file, struct MPWToolS
 		close(fd);
 	}
 
-	win->shellWidget = XtVaAppCreateShell(NULL, NULL, topLevelShellWidgetClass, win->app->display,
+	win->shellWidget = XtVaAppCreateShell(app->appName, "MPWShell", topLevelShellWidgetClass, app->display,
 		XmNuserData, win,
 		XmNdeleteResponse, XmDO_NOTHING,
 		NULL);
 
-	XmAddWMProtocolCallback(win->shellWidget, win->app->WM_DELETE_WINDOW, MPWShellWinClose, win);
+	XmAddWMProtocolCallback(win->shellWidget, app->WM_DELETE_WINDOW, MPWShellWinClose, win);
 
-	win->mainWidget = XtVaCreateWidget("mainWidget", xmMainWindowWidgetClass, win->shellWidget, XmNuserData, win, NULL);
+	win->mainWidget = XtVaCreateWidget("main", xmMainWindowWidgetClass, win->shellWidget, XmNuserData, win, NULL);
 
 	win->menubarWidget = XmCreateMenuBar(win->mainWidget, "menuBar", NULL, 0);
 
@@ -861,11 +876,11 @@ static void SaveYesNoCancelCB(Widget w,XtPointer client_data, XtPointer call_dat
 
 void MPWShellWinOpen(struct MPWShellWin *win)
 {
+	struct MPWShellApp *app=win->app;
 	Display *display=win->app->display;
-	XpmAttributes attributes;
 	Window window;
 	char buf[512];
-	char *title = win->app->appData.title;
+	char *title = app->appData.title;
 	XmString messageText = XmStringGenerate("this page is left intentionally blank", "UTF-8", XmCHARSET_TEXT, NULL);
 
 	if (win->baseName)
@@ -874,12 +889,7 @@ void MPWShellWinOpen(struct MPWShellWin *win)
 		title = buf;
 	}
 
-	XtVaSetValues(win->shellWidget, XmNtitle, title, XmNiconName, win->app->appData.title, NULL);
-
-	win->aboutPixmap=XCreateBitmapFromData(
-			win->app->display,
-			XRootWindowOfScreen(XtScreen(win->shellWidget)),
-			mpwshell_bits,mpwshell_width,mpwshell_height);
+	XtVaSetValues(win->shellWidget, XmNtitle, title, XmNiconName, app->appData.title, NULL);
 
 	{
 		Arg args[10];
@@ -888,9 +898,9 @@ void MPWShellWinOpen(struct MPWShellWin *win)
 		XmString yesText = XmStringCreateLocalized("Yes");
 		XmString noText = XmStringCreateLocalized("No");
 		XmString cancelText = XmStringCreateLocalized("Cancel");
-		XtSetArg(args[n],XmNmessageString, messageText); n++;
-		XtSetArg(args[n],XmNdefaultButtonType, XmDIALOG_OK_BUTTON); n++;
-		XtSetArg(args[n],XmNtitle, win->app->appData.title); n++;
+		XtSetArg(args[n], XmNmessageString, messageText); n++;
+		XtSetArg(args[n], XmNdefaultButtonType, XmDIALOG_OK_BUTTON); n++;
+		XtSetArg(args[n], XmNtitle, app->appData.title); n++;
 		XtSetArg(args[n], XmNautoUnmanage, False); n++;
 		XtSetArg(args[n], XmNokLabelString, yesText); n++;
 		XtSetArg(args[n], XmNcancelLabelString, noText); n++;
@@ -914,20 +924,15 @@ void MPWShellWinOpen(struct MPWShellWin *win)
 
 		XtSetArg(args[n],XmNmessageString, messageText); n++;
 		XtSetArg(args[n],XmNdefaultButtonType, XmDIALOG_OK_BUTTON); n++;
-		XtSetArg(args[n],XmNtitle, win->app->appData.title); n++;
+		XtSetArg(args[n],XmNtitle, app->appData.title); n++;
 
-		Widget messageBox = XmCreateMessageDialog(win->shellWidget,"helpDialog",args,n);
+		Widget messageBox = XmCreateInformationDialog(win->shellWidget,"helpDialog",args,n);
 
 		XtAddCallback(messageBox, XmNokCallback, HelpAboutOkCB, win);
 		XtAddCallback(messageBox, XmNunmapCallback, HelpAboutUnmapCB, win);
 
 		XtUnmanageChild(XtNameToWidget(messageBox, xmDIALOG_CANCEL_BUTTON));
 		XtUnmanageChild(XtNameToWidget(messageBox, xmDIALOG_HELP_BUTTON));
-
-		n=0;
-		XtSetArg(args[n], XmNdialogType, XmDIALOG_INFORMATION); n++;
-		XtSetArg(args[n], XmNsymbolPixmap, m ? XmUNSPECIFIED_PIXMAP : win->aboutPixmap); n++;
-		XtSetValues(messageBox, args, n);
 
 		if (m)
 		{
@@ -944,7 +949,7 @@ void MPWShellWinOpen(struct MPWShellWin *win)
 	{
 		Arg args[5];
 		int n=0;
-		XtSetArg(args[n], XmNtitle, win->app->appData.title); n++;
+		XtSetArg(args[n], XmNtitle, app->appData.title); n++;
 		win->selectionDialog = XmCreateFileSelectionDialog(win->shellWidget, "fileDialog", args, n);
 
 		XtAddCallback(win->selectionDialog, XmNcancelCallback, FileDialogCancel, win);
@@ -952,15 +957,34 @@ void MPWShellWinOpen(struct MPWShellWin *win)
 		XtAddCallback(win->selectionDialog, XmNunmapCallback, FileDialogUnmap, win);
 	}
 
-	memset(&attributes,0,sizeof(attributes));
-	
 	XtManageChild(win->menubarWidget);
 	XtManageChild(win->mainWidget);
 	XtRealizeWidget(win->shellWidget);
 
 	window = XtWindow(win->shellWidget);
 
-	XpmCreatePixmapFromData(display, window, mpwshell_xpm, &win->iconPixmap, &win->iconMask,&attributes);
+	if (app->useColourIcon)
+	{
+		XpmAttributes attributes;
+		XpmColorSymbol backgroundColour={"none",NULL,0};
+		memset(&attributes,0,sizeof(attributes));
+
+		XpmCreatePixmapFromData(display, window, mpwshell_xpm, &win->iconPixmap, &win->iconMask, &attributes);
+
+		memset(&attributes,0,sizeof(attributes));
+		attributes.valuemask=XpmColorSymbols;
+		attributes.colorsymbols=&backgroundColour;
+		attributes.numsymbols=1;
+
+		XtVaGetValues(win->aboutMessageBox, XmNbackground, &backgroundColour.pixel, NULL);
+
+		XpmCreatePixmapFromData(display, window, mpwshell_xpm, &win->aboutPixmap, NULL,&attributes);
+	}
+	else
+	{
+		win->iconPixmap = XCreateBitmapFromData(display, window, mpwshell_bits, mpwshell_width, mpwshell_height);
+		win->iconMask = XCreateBitmapFromData(display, window, mpwshell_m_bits, mpwshell_m_width, mpwshell_m_height);
+	}
 
 	XWMHints hints;
 	hints.flags = IconPixmapHint | IconMaskHint;
@@ -968,6 +992,13 @@ void MPWShellWinOpen(struct MPWShellWin *win)
 	hints.icon_mask = win->iconMask;
 
 	XSetWMHints(display, window, &hints);
+
+	{
+		Arg args[2];
+		int n=0;
+		XtSetArg(args[n], XmNsymbolPixmap, app->useColourIcon ? win->aboutPixmap : win->iconPixmap); n++;
+		XtSetValues(win->aboutMessageBox, args, n);
+	}
 }
 
 void MPWShellWinFree(struct MPWShellWin *win)

@@ -11,6 +11,7 @@ typedef struct {
 
 struct MPWShellApp
 {
+	const char *appName;
 	int writePipeAdded,readPipeAdded,nextClientId;
 	XtInputId idReader,idWriter;
 	XtAppContext appContext;
@@ -18,7 +19,8 @@ struct MPWShellApp
 	Display *display;
 	struct MPWShellWin *winList;
 	AppData appData;
-	Atom WM_DELETE_WINDOW;
+	char useColourIcon;
+	Atom WM_DELETE_WINDOW, _NET_SUPPORTED;
 };
 
 struct MPWShellWin
