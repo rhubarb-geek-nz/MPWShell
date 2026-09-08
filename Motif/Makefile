@@ -3,8 +3,8 @@
 
 SRC=main.c window.c messages.c ../src/mpwtools.c ../src/mbcs.c
 CFLAGS=-Wall -Werror
-MPWSHELL_VERSION=0.9.5
-MPWSHELL_ABOUT="MPW Shell, $(MPWSHELL_VERSION)\nCopyright \xC2\xA9 2026 Roger Brown"
+MPWSHELL_VERSION=0.9.6
+MPWSHELL_ABOUT="Version $(MPWSHELL_VERSION), Copyright \xC2\xA9 2026 Roger Brown"
 PREFIX=/usr/local
 
 all: mpwshell

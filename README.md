@@ -52,3 +52,40 @@ this should return
 ```
 2122
 ```
+
+## Troubleshooting
+The following error is caused by no DISPLAY environment for X11.
+
+```
+mpwshell: No display
+```
+
+If [PowerShell](https://github.com/PowerShell/PowerShell) is not installed, you will see
+
+```
+pwsh: No such file or directory
+```
+
+If the [rhubarb-geek-nz.ToolServer](https://www.powershellgallery.com/packages/rhubarb-geek-nz.ToolServer/0.9.2) module has not been installed in PowerShell you will see
+
+```
+Invoke-MPWShell.ToolServer: The term 'Invoke-MPWShell.ToolServer' is not recognized as a name of a cmdlet, function, script file, or executable program.
+Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+```
+
+If the [rhubarb-geek-nz.MPWShell](https://www.powershellgallery.com/packages/rhubarb-geek-nz.MPWShell/0.9.2) module has not been installed in PowerShell you may see
+
+```
+Import-Module: The specified module 'rhubarb-geek-nz.MPWShell' was not loaded because no valid module file was found in any module directory.
+```
+
+If the window stays clear and does not close due to the program exiting then the PowerShell process has started correctly.
+
+## Other Build Systems
+
+| Platform | Mechansim | Tool | Build file |
+|----------|-----------|------|------------|
+| Arch Linux | pacman | makepkg | [PKGBUILD](https://github.com/rhubarb-geek-nz/pacman/blob/main/mpwshell-motif/PKGBUILD) |
+| Alpine | apk | abuild | [APKBUILD](https://github.com/rhubarb-geek-nz/alpen-serial/blob/main/mpwshell-motif/APKBUILD) |
+| Gentoo | portage | emerge | [mpwshell-0.9.6.ebuild](https://github.com/rhubarb-geek-nz/portage/blob/main/app-editors/mpwshell/mpwshell-0.9.6.ebuild) |
+| Snap | snap | snapcraft | [snapcraft.yaml](https://github.com/rhubarb-geek-nz/mpwshell-snapcraft/blob/main/snap/snapcraft.yaml) |

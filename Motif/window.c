@@ -22,6 +22,9 @@
 static const char *xmDIALOG_CANCEL_BUTTON = "Cancel";
 static const char *xmDIALOG_HELP_BUTTON = "Help";
 static const char *xmDIALOG_OK_BUTTON = "Ok";
+static const char *xmDIALOG_MESSAGE_LABEL = "Message";
+static const char *szAboutString = MPWSHELL_ABOUT;
+static const char *szTextMessage = "TextMessage";
 
 struct MPWShellWin *MPWShellWinNew(struct MPWShellApp *app)
 {
@@ -33,21 +36,21 @@ struct MPWShellWin *MPWShellWinNew(struct MPWShellApp *app)
 	return win;
 }
 
-void XmTextInsertUTF8(Widget w,XmTextPosition pos,const unsigned char *str,int len)
+static wchar_t *wcsFromUTF8(const unsigned char *str,int len)
 {
-	wchar_t *buf=malloc(sizeof(buf[0])*(len+1));
-	wchar_t *dest=buf;
+	int n = 0;
 	const unsigned char *src=str;
+	int m = len;
 
-	while (len>0)
+	while (m > 0)
 	{
-		int run=mbcsLen(src,len);
+		int run = mbcsLen(src,m);
 
 		if (run > 0)
 		{
-			*dest++=mbcsToChar(src,len);
-			src+=run;
-			len-=run;
+			src += run;
+			m -= run;
+			n++;
 		}
 		else
 		{
@@ -55,11 +58,120 @@ void XmTextInsertUTF8(Widget w,XmTextPosition pos,const unsigned char *str,int l
 		}
 	}
 
-	*dest=0;
+	wchar_t *wcs = malloc(sizeof(*wcs)*(n+1));
+	wchar_t *dest = wcs;
+
+	src = str;
+	m = len;
+
+	while (m > 0)
+	{
+		int run = mbcsLen(src, m);
+
+		if (run > 0)
+		{
+			*dest++ = mbcsToChar(src, run);
+			src += run;
+			m -= run;
+			n++;
+		}
+		else
+		{
+			break;
+		}
+	}
+
+	*dest = 0;
+
+	return wcs;
+}
+
+void XmTextInsertUTF8(Widget w,XmTextPosition pos,const unsigned char *str,int len)
+{
+	wchar_t *buf = wcsFromUTF8(str,len);
 
 	XmTextInsertWcs(w,pos,buf);
 
 	free(buf);
+}
+
+static XmString XmStringCreateLocalizedUTF8(const unsigned char *str,size_t len)
+{
+	XmString result = NULL;
+	if (len && str[len-1]==0xD) len--;
+
+	if (len)
+	{
+		wchar_t *buf = wcsFromUTF8(str,len);;
+
+		if (buf)
+		{
+			size_t localLen = wcstombs(NULL, buf, 0);
+
+			if (localLen != (size_t)-1)
+			{
+				char *localBuf = malloc(localLen + 2);
+
+				localLen = wcstombs(localBuf, buf, localLen + 1);
+
+				localBuf[localLen]=0;
+
+				result = XmStringCreateLocalized(localBuf);
+
+				free(localBuf);
+			}
+
+			free(buf);
+		}
+	}
+	else
+	{
+		result = XmStringCreateLocalized("");
+	}
+
+	return result;
+}
+
+XmString XmStringCreateUTF8(const unsigned char *buf, size_t len)
+{
+	XmString result = NULL;
+
+	while (len)
+	{
+		const char *cp=(const char *)buf;
+		const char *tok = strchr(cp, 0xA);
+		XmString line;
+
+		if (tok)
+		{
+			size_t run = tok - cp;
+
+			line = XmStringCreateLocalizedUTF8(buf, run);
+
+			run++;
+			buf += run;
+			len -= run;
+		}
+		else
+		{
+			line = XmStringCreateLocalizedUTF8(buf, len);
+			len = 0;
+		}
+
+		if (line)
+		{
+			if (result)
+			{
+				result = XmStringConcatAndFree(XmStringConcatAndFree(result,XmStringSeparatorCreate()),line);
+			}
+			else
+			{
+				result = line;
+			}
+		}
+	}
+
+	return result;
 }
 
 static void keyPressHandler(Widget w, XtPointer client_data, XEvent *event, Boolean *call_relative)
@@ -471,26 +583,96 @@ static void EditClearCB(Widget w,XtPointer client_data, XtPointer call_data)
 
 void MPWShellWinMessageBox(struct MPWShellWin *win)
 {
-	if (win->messageQueue && !win->aboutMapped)
+	while (win->messageQueue && !win->aboutMapped)
 	{
 		Arg args[3];
 		int n=0;
 		struct MPWToolServerMessage *msg=win->messageQueue;
-		XmString messageText = XmStringGenerate(msg->data, "UTF-8", XmCHARSET_TEXT, NULL);
 		Widget messageBox = msg->packetType ? win->infoMessageBox : win->aboutMessageBox;
+		Widget text=XtNameToWidget(messageBox, szTextMessage);
 
 		win->messageQueue = msg->next;
-		win->aboutMapped = 1;
 
-		XtSetArg(args[n], XmNmessageString, messageText); n++;
+		if (text)
+		{
+			wchar_t *msgWcs = wcsFromUTF8(msg->data,msg->dataLen);
+
+			if (msgWcs)
+			{
+				int rows = 1;
+				int maxCol = 0;
+				int cols = 0;
+				const wchar_t *p=msgWcs;
+				wchar_t last=0;
+
+				while (*p)
+				{
+					last=*p++;
+
+					if (last == 0xA)
+					{
+						rows++;
+						if (cols > maxCol)
+						{
+							maxCol = cols;
+						}
+						cols = 0;
+					}
+					else
+					{
+						cols++;
+					}
+				}
+
+				if (cols > maxCol)
+				{
+					maxCol = cols;
+				}
+
+				if (last == 0xA) rows--;
+
+				if (rows > 24)
+				{
+					rows = 24;
+				}
+
+				if (maxCol > 80)
+				{
+					maxCol = 80;
+				}
+
+				XtSetArg(args[n], XmNrows, rows); n++;
+				XtSetArg(args[n], XmNcolumns, maxCol); n++;
+				XtSetValues(text,args,n);
+
+				XmTextSetStringWcs(text, msgWcs);
+				free(msgWcs);
+
+				win->aboutMapped = 1;
+			}
+		}
+		else
+		{
+			XmString messageText = XmStringCreateUTF8(msg->data,msg->dataLen);
+
+			if (messageText)
+			{
+				XtSetArg(args[n], XmNmessageString, messageText); n++;
+
+				XtSetValues(messageBox,args,n);
+
+				XmStringFree(messageText);
+
+				win->aboutMapped = 1;
+			}
+		}
+
+		if (win->aboutMapped)
+		{
+			XtManageChild(messageBox);
+		}
 
 		MPWToolServerMessageRelease(msg);
-
-		XtSetValues(messageBox,args,n);
-
-		XmStringFree(messageText);
-
-		XtManageChild(messageBox);
 	}
 }
 
@@ -507,20 +689,18 @@ static Boolean MessageBoxWorkProc(XtPointer closure)
 static void HelpAboutCB(Widget w,XtPointer client_data, XtPointer call_data)
 {
 	struct MPWShellWin *win = client_data;
-	const char *msgText=MPWSHELL_ABOUT;
-	int msgLen=strlen(msgText);
-
-	struct MPWToolServerMessage *msg=MPWToolServerMessageNew(0,win->clientId,0,msgLen);
+	int msgLen = strlen(szAboutString);
+	struct MPWToolServerMessage *msg = MPWToolServerMessageNew(0, win->clientId, 0, msgLen);
 
 	if (msg)
 	{
-		memcpy(msg->data,msgText,msgLen);
+		memcpy(msg->data, szAboutString, msgLen);
 
 		if (win->messageQueue)
 		{
-			struct MPWToolServerMessage *p=win->messageQueue;
-			while (p->next) p=p->next;
-			p->next=msg;
+			struct MPWToolServerMessage *p = win->messageQueue;
+			while (p->next) p = p->next;
+			p->next = msg;
 		}
 		else
 		{
@@ -881,7 +1061,9 @@ void MPWShellWinOpen(struct MPWShellWin *win)
 	Window window;
 	char buf[512];
 	char *title = app->appData.title;
-	XmString messageText = XmStringGenerate("this page is left intentionally blank", "UTF-8", XmCHARSET_TEXT, NULL);
+	char *blank = "this page is left intentionally blank";
+
+	XmString messageText = XmStringCreateLocalized(blank);
 
 	if (win->baseName)
 	{
@@ -934,13 +1116,34 @@ void MPWShellWinOpen(struct MPWShellWin *win)
 		XtUnmanageChild(XtNameToWidget(messageBox, xmDIALOG_CANCEL_BUTTON));
 		XtUnmanageChild(XtNameToWidget(messageBox, xmDIALOG_HELP_BUTTON));
 
+		if (m || strchr(szAboutString, 0xA))
+		{
+			XtUnmanageChild(XtNameToWidget(messageBox, xmDIALOG_MESSAGE_LABEL));
+
+			Widget textField = XtVaCreateManagedWidget(szTextMessage,
+				xmTextWidgetClass, messageBox,
+				XmNeditable, False,
+				XmNsensitive, True,
+				XmNrows, 5,
+				XmNcolumns, 20,
+				XmNeditMode, XmMULTI_LINE_EDIT,
+				XmNuserData, win,
+				NULL);
+
+			if (textField)
+			{
+				XmTextSetString(textField, blank);
+				XtManageChild(textField);
+			}
+		}
+
 		if (m)
 		{
-			win->infoMessageBox=messageBox;
+			win->infoMessageBox = messageBox;
 		}
 		else
 		{
-			win->aboutMessageBox=messageBox;
+			win->aboutMessageBox = messageBox;
 		}
 	}
 
