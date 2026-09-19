@@ -39,7 +39,7 @@ $moduleSettings = @{
 	FunctionsToExport = @()
 	CmdletsToExport = @('Open-MPWShell','New-MPWShell','Show-MPWShell')
 	VariablesToExport = '*'
-	AliasesToExport = @('new','open')
+	AliasesToExport = @()
 	ProjectUri = $ProjectUri
 }
 

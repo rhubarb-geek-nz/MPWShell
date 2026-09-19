@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF8"/>
+        <title>ToolServer</title>
+        <meta name="keywords" content="specific, comma, delimited, keywords" />
+        <meta name="description" content="ToolServer is an AppleScript tool for PowerShell." />
+        <meta name="robots" content="index, anchor" />
+    </head>
+    <body>
+        <h2>ToolServer</h2>
+        <p>ToolServer is an AppleScript tool for <a href="https://github.com/PowerShell/PowerShell">PowerShell</a>.
+It provides the standard 'do script' mechanism for invoking scripts in 3rd party applications.
+<h2>Apple Script</h2>
+You can use the following in the Script Editor application.
+<pre><code>
+tell application "ToolServer"
+	do script "$PSVersionTable"
+end tell
+</code></pre>
+Likewise from the shell command line
+<pre><code>
+% osascript -e 'tell application "ToolServer" to do script "Get-Runspace"'
+</code><pre>
+
+<h2>Preferences</h2>
+<p>The preferences are in ~/Library/Preferences/nz.geek.rhubarb.ToolServer.plist.</p>
+<TABLE>
+	<THEAD>
+		<TR align="left">
+			<TH>Name</TH>
+			<TH>Type</TH>
+			<TH>Purpose</TH>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR>
+			<TD>ToolServerLaunchPath</TD>
+			<TD>String</TD>
+			<TD>Path to executable</TD>
+		</TR>
+		<TR>
+			<TD>ToolServerArguments</TD>
+			<TD>Array</TD>
+			<TD>Arguments passed to the ToolServer process</TD>
+		</TR>
+		<TR>
+			<TD>ToolServerEnvironment</TD>
+			<TD>Dictionary</TD>
+			<TD>Values to add to the environment for the ToolServer process</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<p>The defaults are the equivalent of the following XML:</p>
+<pre><code>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;
+&lt;plist version="1.0"&gt;
+&lt;dict&gt;
+	&lt;key&gt;ToolServerLaunchPath&lt;/key&gt;
+	&lt;string&gt;/usr/local/bin/pwsh&lt;/string&gt;
+	&lt;key&gt;ToolServerArguments&lt;/key&gt;
+	&lt;array&gt;
+		&lt;string&gt;-NoLogo&lt;/string&gt;
+		&lt;string&gt;-NoProfile&lt;/string&gt;
+		&lt;string&gt;-NonInteractive&lt;/string&gt;
+		&lt;string&gt;-Command&lt;/string&gt;
+		&lt;string&gt;
+			$ErrorActionPreference = 'Stop' ;
+			Import-Module '/Applications/ToolServer.app/Contents/Resources/Modules/rhubarb-geek-nz.ToolServer/rhubarb-geek-nz.ToolServer.psd1' ;
+			Invoke-MPWShell.ToolServer -Protocol 0c63fba6-7c2a-4b72-8de0-b3bd579dedaa
+		&lt;/string&gt;
+	&lt;/array&gt;
+	&lt;key&gt;ToolServerEnvironment&lt;/key&gt;
+	&lt;dict&gt;
+		&lt;key&gt;POWERSHELL_TELEMETRY_OPTOUT&lt;/key&gt;
+		&lt;string&gt;true&lt;/string&gt;
+		&lt;key&gt;POWERSHELL_UPDATECHECK&lt;/key&gt;
+		&lt;string&gt;Off&lt;/string&gt;
+	&lt;/dict&gt;
+&lt;/dict&gt;
+&lt;/plist&gt;
+</code></pre>
+
+<h2>MIT License</h2>
+This software is covered by the MIT License.
+<pre><code>
+MIT License
+
+Copyright (c) 2026 rhubarb-geek-nz
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+</code></pre>
+<h2>ToolServer is open-source</h2>
+This <a href="https://github.com/rhubarb-geek-nz/MPWShell">project<a/> supports Windows, Linux, macOS and FreeBSD.
+    </body>
+</html>

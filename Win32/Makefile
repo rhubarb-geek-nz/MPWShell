@@ -4,9 +4,9 @@ BINDIR=bin\$(VSCMD_ARG_TGT_ARCH)
 BUNDLE=bundle
 RESFILE=$(OBJDIR)\mpwshell.res
 APP=$(BINDIR)\mpwshell.exe
-MSI=MPWShell-$(mpwshell_STR3)-$(VSCMD_ARG_TGT_ARCH).msi
-MSIX=$(BUNDLE)\MPWShell-$(mpwshell_STR3)-$(VSCMD_ARG_TGT_ARCH).msix
-MSIXBUNDLE=MPWShell-$(mpwshell_STR3).msixbundle
+MSI=MPWShell-$(MPWSHELL_STR3)-$(VSCMD_ARG_TGT_ARCH).msi
+MSIX=$(BUNDLE)\MPWShell-$(MPWSHELL_STR3)-$(VSCMD_ARG_TGT_ARCH).msix
+MSIXBUNDLE=MPWShell-$(MPWSHELL_STR3).msixbundle
 CHM=htmlhelp\mpwshell.chm
 SRC=mpwshell.c
 
@@ -44,14 +44,14 @@ $(APP): $(SRC) $(OBJDIR) $(BINDIR) $(RESFILE)
 		htmlhelp.lib				\
 		comdlg32.lib				\
 		version.lib					\
-		/VERSION:$(mpwshell_INT2)	\
+		/VERSION:$(MPWSHELL_INT2)	\
 		$(RESFILE)
 	if exist "$(BINDIR)\mpwshell.exp" del "$(BINDIR)\mpwshell.exp"
 	if exist "$(BINDIR)\mpwshell.lib" del "$(BINDIR)\mpwshell.lib"
 	signtool sign /sha1 "$(CertificateThumbprint)" /fd SHA256 /t http://timestamp.digicert.com $@
 
 $(RESFILE): mpwshell.unicode.rc
-	rc /r $(RCFLAGS) "/Dmpwshell_INT4=$(mpwshell_INT4)" "/Dmpwshell_STR4=\"$(mpwshell_STR4)\"" /fo$@ mpwshell.unicode.rc
+	rc /r $(RCFLAGS) "/DMPWSHELL_INT4=$(MPWSHELL_INT4)" "/DMPWSHELL_STR4=\"$(MPWSHELL_STR4)\"" /fo$@ mpwshell.unicode.rc
 
 $(OBJDIR) $(BINDIR) $(BUNDLE):
 	mkdir $@
@@ -59,8 +59,8 @@ $(OBJDIR) $(BINDIR) $(BUNDLE):
 $(MSI): $(APP) $(CHM) "mpwshell.wxs"
 	"$(WIX)bin\candle.exe" -nologo \
 			"mpwshell.wxs" \
-			"-dmpwshell_STR4=$(mpwshell_STR4)" \
-			"-dmpwshell_STR3=$(mpwshell_STR3)" \
+			"-dMPWSHELL_STR4=$(MPWSHELL_STR4)" \
+			"-dMPWSHELL_STR3=$(MPWSHELL_STR3)" \
 			"-dMSIARCH=$(VSCMD_ARG_TGT_ARCH)" \
 			"-dMSIUPGRADECODE=$(MSIUPGRADECODE)" \
 			"-dMSIIS64BIT=$(MSIIS64BIT)" \
@@ -69,7 +69,7 @@ $(MSI): $(APP) $(CHM) "mpwshell.wxs"
 			"-dMSISHORTCUTID=$(MSISHORTCUTID)"
 	"$(WIX)bin\light.exe" -nologo -cultures:null -out $@ "mpwshell.wixobj"
 	del "mpwshell.wixobj"
-	del "mpwshell-$(mpwshell_STR3)-$(VSCMD_ARG_TGT_ARCH).wixpdb"
+	del "mpwshell-$(MPWSHELL_STR3)-$(VSCMD_ARG_TGT_ARCH).wixpdb"
 	signtool sign /sha1 "$(CertificateThumbprint)" /fd SHA256 /t http://timestamp.digicert.com $@
 
 $(MSIXBUNDLE):
@@ -81,7 +81,7 @@ $(MSIX): $(BUNDLE) $(APP) $(CHM)
 	COPY /Y $(CHM)
 	DIR mpwshell.exe
 	DIR mpwshell.chm
-	makeappx pack /m AppxManifest.xml /f mapping.ini /p $@
+	makeappx pack /m "AppxManifest-$(MPWSHELL_STR4)-$(VSCMD_ARG_TGT_ARCH).xml" /f mapping.ini /p $@
 	DEL mpwshell.exe
 	DEL mpwshell.chm
 	signtool sign /sha1 "$(BundleThumbprint)" /fd SHA256 /t http://timestamp.digicert.com $@

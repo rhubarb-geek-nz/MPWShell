@@ -56,6 +56,100 @@ foreach ($project in 'ToolServerPS', 'MPWShellPS')
 	}
 }
 
+if ($IsMacOS)
+{
+	Push-Location -LiteralPath 'Cocoa'
+
+	try
+	{
+		foreach ($target in 'ToolServer', 'MPW Shell')
+		{
+			foreach ($dir in 'build','Modules','Packages')
+			{
+				if (Test-Path -LiteralPath $dir -PathType Container)
+				{
+					Remove-Item -LiteralPath $dir -Recurse -Force
+				}
+			}
+
+			foreach ($file in 'distribution.xml')
+			{
+				if (Test-Path -LiteralPath $file -PathType Leaf)
+				{
+					Remove-Item -LiteralPath $file
+				}
+			}
+
+			$null = New-Item -ItemType Directory -Name 'Modules'
+
+			$ModuleList = ,'../ToolServerPS'
+
+			if ($target -eq 'MPW Shell')
+			{
+				$ModuleList += '../MPWShellPS'
+			}
+
+			Get-ChildItem -LiteralPath $ModuleList -Recurse -Filter '*.psd1' | ForEach-Object {
+				$dirName = $_.DirectoryName
+				$name = $_.Name
+				$baseName = $_.BaseName
+				$manifest = Import-PowerShellDataFile -LiteralPath $_
+				$rootModule = $manifest.RootModule
+				$null = New-Item -Path 'Modules' -Name $baseName -ItemType Directory
+				Copy-Item -LiteralPath "$dirName/$name" -Destination "Modules/$baseName"
+				Copy-Item -LiteralPath "$dirName/$rootModule" -Destination "Modules/$baseName"
+			}
+
+			& xcodebuild -configuration Release -target "$target" build MARKETING_VERSION=$Version CURRENT_PROJECT_VERSION=$VersionNumber
+
+			if ($LastExitCode)
+			{
+				throw $LastExitCode
+			}
+
+			$CocoaDir = Get-Location
+
+			$pkgDir = New-Item -ItemType Directory -Name 'Packages'
+
+			$APPLE_DEVELOPER = $env:APPLE_DEVELOPER
+
+			& pkgbuild --component "$CocoaDir/build/Release/$target.app" --install-location /Applications --sign "Developer ID Installer: $APPLE_DEVELOPER" "$CocoaDir/Packages/$target.app"
+
+			if ($LastExitCode)
+			{
+				throw $LastExitCode
+			}
+
+			& productbuild --synthesize --package "$CocoaDir/Packages/$target.app" "$CocoaDir/distribution.xml"
+
+			if ($LastExitCode)
+			{
+				throw $LastExitCode
+			}
+
+			[xml]$xml = Get-Content -LiteralPath "$CocoaDir/distribution.xml"
+			$text = $xml.CreateTextNode("$target $Version")
+			$title = $xml.CreateElement('title')
+			$null = $title.AppendChild($text)
+			$null = $xml.documentElement.AppendChild($title)
+			$xml.Save("$CocoaDir/distribution.xml")
+
+			$spaceLessTarget = $target.replace(' ','')
+
+			& productbuild --distribution "$CocoaDir/distribution.xml" --package-path "$CocoaDir/Packages" --sign "Developer ID Installer: $APPLE_DEVELOPER" "$CocoaDir/$spaceLessTarget-$Version.pkg"
+
+			if ($LastExitCode)
+			{
+				throw $LastExitCode
+			}
+		}
+	}
+	finally
+	{
+		Pop-Location
+	}
+}
+
 if ($IsLinux)
 {
 	Push-Location -LiteralPath 'Motif'
@@ -223,14 +317,16 @@ if ($IsWindows -or ( 'Desktop' -eq $PSEdition ))
 			$xmlNode.ProcessorArchitecture = "$ARCH"
 			$xmlNode.Version = $VersionStr4
 
-			$xmlDoc.Save("$Win32Dir\AppxManifest.xml")
+			$APPXXML ="$Win32Dir\AppxManifest-$VersionStr4-$ARCH.xml"
+
+			$xmlDoc.Save($APPXXML)
 
 			@"
 CALL "$VCVARS"
 IF ERRORLEVEL 1 EXIT %ERRORLEVEL%
-NMAKE /NOLOGO clean mpwshell_STR3="$Version"
+NMAKE /NOLOGO clean MPWSHELL_STR3="$Version"
 IF ERRORLEVEL 1 EXIT %ERRORLEVEL%
-NMAKE /NOLOGO mpwshell_INT2="$VersionInt2" mpwshell_STR4="$VersionStr4" mpwshell_INT4="$VersionInt4" CertificateThumbprint="$CertificateThumbprint" BundleThumbprint="$BundleThumbprint" MSIUPGRADECODE="$MSIUPGRADECODE" MSISHORTCUTID="$MSISHORTCUTID" MSIPROGFILES="$MSIPROGFILES" MSIIS64BIT="$MSIIS64BIT" MSIINSTALLVERS="$MSIINSTALLVERS" mpwshell_STR3="$Version" BundleThumbprint="$BundleThumbprint"
+NMAKE /NOLOGO MPWSHELL_INT2="$VersionInt2" MPWSHELL_STR4="$VersionStr4" MPWSHELL_INT4="$VersionInt4" CertificateThumbprint="$CertificateThumbprint" BundleThumbprint="$BundleThumbprint" MSIUPGRADECODE="$MSIUPGRADECODE" MSISHORTCUTID="$MSISHORTCUTID" MSIPROGFILES="$MSIPROGFILES" MSIIS64BIT="$MSIIS64BIT" MSIINSTALLVERS="$MSIINSTALLVERS" MPWSHELL_STR3="$Version" BundleThumbprint="$BundleThumbprint"
 EXIT %ERRORLEVEL%
 "@ | & "$env:COMSPEC"
 
@@ -238,12 +334,14 @@ EXIT %ERRORLEVEL%
 			{
 				exit $LastExitCode
 			}
+
+			Remove-Item -LiteralPath $APPXXML
 		}
 
 		@"
 CALL "$VCVARSDIR\$VCVARSHOST"
 IF ERRORLEVEL 1 EXIT %ERRORLEVEL%
-NMAKE /NOLOGO mpwshell_STR3="$Version" mpwshell_STR4="$VersionStr4" mpwshell_INT4="$VersionInt4" CertificateThumbprint="$CertificateThumbprint" BundleThumbprint="$BundleThumbprint" "MPWShell-$Version.msixbundle"
+NMAKE /NOLOGO MPWSHELL_STR3="$Version" MPWSHELL_STR4="$VersionStr4" MPWSHELL_INT4="$VersionInt4" CertificateThumbprint="$CertificateThumbprint" BundleThumbprint="$BundleThumbprint" "MPWShell-$Version.msixbundle"
 EXIT %ERRORLEVEL%
 "@ | & "$env:COMSPEC"
 

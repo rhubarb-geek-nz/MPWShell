@@ -1,0 +1,854 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		D9145C033058364A00789608 /* Modules in Resources */ = {isa = PBXBuildFile; fileRef = D9145C023058364A00789608 /* Modules */; };
+		D91E1A6A30580DDD00C38680 /* MPWShellHelp.help in Resources */ = {isa = PBXBuildFile; fileRef = D91E1A6330580CB800C38680 /* MPWShellHelp.help */; };
+		D930190930581D45005EAF56 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = D930190830581D45005EAF56 /* index.html */; };
+		D9B35D46305D708A00D02389 /* ToolServerHelp.help in Resources */ = {isa = PBXBuildFile; fileRef = D9B35D3F305D6F3300D02389 /* ToolServerHelp.help */; };
+		D9B35DE9305D753200D02389 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = D9B35D4B305D725200D02389 /* index.html */; };
+		D9C03FB9305D45EE00CA82B2 /* Modules in Resources */ = {isa = PBXBuildFile; fileRef = D9145C023058364A00789608 /* Modules */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		D91E1A6830580DB400C38680 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D92F3ED53021F5170012C95A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D91E1A6230580CB800C38680;
+			remoteInfo = MPWShellHelp;
+		};
+		D9B35D44305D706C00D02389 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D92F3ED53021F5170012C95A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D9B35D3E305D6F3300D02389;
+			remoteInfo = ToolServerHelp;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		D9145C023058364A00789608 /* Modules */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Modules; sourceTree = "<group>"; };
+		D91E1A6330580CB800C38680 /* MPWShellHelp.help */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MPWShellHelp.help; sourceTree = BUILT_PRODUCTS_DIR; };
+		D91E1A6730580CD800C38680 /* MPWShellHelp-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MPWShellHelp-Info.plist"; sourceTree = "<group>"; };
+		D92F3EDD3021F5170012C95A /* MPW Shell.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MPW Shell.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D930190730581D45005EAF56 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = Base; path = Base.lproj/index.html; sourceTree = "<group>"; };
+		D9B35D3F305D6F3300D02389 /* ToolServerHelp.help */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ToolServerHelp.help; sourceTree = BUILT_PRODUCTS_DIR; };
+		D9B35D43305D6F5900D02389 /* ToolServerHelp-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ToolServerHelp-Info.plist"; sourceTree = "<group>"; };
+		D9B35D4A305D725200D02389 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = Base; path = Base.lproj/index.html; sourceTree = "<group>"; };
+		D9C03F7D305D409100CA82B2 /* ToolServer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ToolServer.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		D9187792305D507700452C27 /* Exceptions for "ToolServer" folder in "ToolServer" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = D9C03F7C305D409100CA82B2 /* ToolServer */;
+		};
+		D92F3EF13021F5180012C95A /* Exceptions for "MPWShell" folder in "MPW Shell" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = D92F3EDC3021F5170012C95A /* MPW Shell */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		D92F3EDF3021F5170012C95A /* MPWShell */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				D92F3EF13021F5180012C95A /* Exceptions for "MPWShell" folder in "MPW Shell" target */,
+			);
+			path = MPWShell;
+			sourceTree = "<group>";
+		};
+		D9C03F7E305D409100CA82B2 /* ToolServer */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				D9187792305D507700452C27 /* Exceptions for "ToolServer" folder in "ToolServer" target */,
+			);
+			path = ToolServer;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D91E1A6030580CB800C38680 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D92F3EDA3021F5170012C95A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D9B35D3C305D6F3300D02389 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D9C03F7A305D409100CA82B2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		D91E1A893058101F00C38680 /* MPWShellHelp */ = {
+			isa = PBXGroup;
+			children = (
+				D91E1A8A305810F800C38680 /* Resources */,
+				D91E1A6730580CD800C38680 /* MPWShellHelp-Info.plist */,
+			);
+			path = MPWShellHelp;
+			sourceTree = "<group>";
+		};
+		D91E1A8A305810F800C38680 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				D930190830581D45005EAF56 /* index.html */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		D92F3ED43021F5170012C95A = {
+			isa = PBXGroup;
+			children = (
+				D9B35D47305D712000D02389 /* ToolServerHelp */,
+				D9145C023058364A00789608 /* Modules */,
+				D91E1A893058101F00C38680 /* MPWShellHelp */,
+				D92F3EDF3021F5170012C95A /* MPWShell */,
+				D9C03F7E305D409100CA82B2 /* ToolServer */,
+				D92F3EDE3021F5170012C95A /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		D92F3EDE3021F5170012C95A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D92F3EDD3021F5170012C95A /* MPW Shell.app */,
+				D91E1A6330580CB800C38680 /* MPWShellHelp.help */,
+				D9C03F7D305D409100CA82B2 /* ToolServer.app */,
+				D9B35D3F305D6F3300D02389 /* ToolServerHelp.help */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D9B35D47305D712000D02389 /* ToolServerHelp */ = {
+			isa = PBXGroup;
+			children = (
+				D9B35D48305D720600D02389 /* Resources */,
+				D9B35D43305D6F5900D02389 /* ToolServerHelp-Info.plist */,
+			);
+			path = ToolServerHelp;
+			sourceTree = "<group>";
+		};
+		D9B35D48305D720600D02389 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				D9B35D4B305D725200D02389 /* index.html */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		D91E1A6230580CB800C38680 /* MPWShellHelp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D91E1A6630580CB800C38680 /* Build configuration list for PBXNativeTarget "MPWShellHelp" */;
+			buildPhases = (
+				D91E1A5F30580CB800C38680 /* Sources */,
+				D91E1A6030580CB800C38680 /* Frameworks */,
+				D91E1A6130580CB800C38680 /* Resources */,
+				D91E1B27305819AD00C38680 /* Re-index Help Files */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MPWShellHelp;
+			packageProductDependencies = (
+			);
+			productName = MPWShellHelp;
+			productReference = D91E1A6330580CB800C38680 /* MPWShellHelp.help */;
+			productType = "com.apple.product-type.bundle";
+		};
+		D92F3EDC3021F5170012C95A /* MPW Shell */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D92F3EF23021F5180012C95A /* Build configuration list for PBXNativeTarget "MPW Shell" */;
+			buildPhases = (
+				D92F3ED93021F5170012C95A /* Sources */,
+				D92F3EDA3021F5170012C95A /* Frameworks */,
+				D92F3EDB3021F5170012C95A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D91E1A6930580DB400C38680 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				D92F3EDF3021F5170012C95A /* MPWShell */,
+			);
+			name = "MPW Shell";
+			packageProductDependencies = (
+			);
+			productName = MPWShell;
+			productReference = D92F3EDD3021F5170012C95A /* MPW Shell.app */;
+			productType = "com.apple.product-type.application";
+		};
+		D9B35D3E305D6F3300D02389 /* ToolServerHelp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D9B35D42305D6F3300D02389 /* Build configuration list for PBXNativeTarget "ToolServerHelp" */;
+			buildPhases = (
+				D9B35D3B305D6F3300D02389 /* Sources */,
+				D9B35D3C305D6F3300D02389 /* Frameworks */,
+				D9B35D3D305D6F3300D02389 /* Resources */,
+				D9B35EBA305D785500D02389 /* Re-index Help Files */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ToolServerHelp;
+			packageProductDependencies = (
+			);
+			productName = ToolServerHelp;
+			productReference = D9B35D3F305D6F3300D02389 /* ToolServerHelp.help */;
+			productType = "com.apple.product-type.bundle";
+		};
+		D9C03F7C305D409100CA82B2 /* ToolServer */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D9C03F8B305D409200CA82B2 /* Build configuration list for PBXNativeTarget "ToolServer" */;
+			buildPhases = (
+				D9C03F79305D409100CA82B2 /* Sources */,
+				D9C03F7A305D409100CA82B2 /* Frameworks */,
+				D9C03F7B305D409100CA82B2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D9B35D45305D706C00D02389 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				D9C03F7E305D409100CA82B2 /* ToolServer */,
+			);
+			name = ToolServer;
+			packageProductDependencies = (
+			);
+			productName = ToolServer;
+			productReference = D9C03F7D305D409100CA82B2 /* ToolServer.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		D92F3ED53021F5170012C95A /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastUpgradeCheck = 2700;
+				TargetAttributes = {
+					D91E1A6230580CB800C38680 = {
+						CreatedOnToolsVersion = 26.6;
+					};
+					D92F3EDC3021F5170012C95A = {
+						CreatedOnToolsVersion = 26.6;
+					};
+					D9B35D3E305D6F3300D02389 = {
+						CreatedOnToolsVersion = 27.0;
+					};
+					D9C03F7C305D409100CA82B2 = {
+						CreatedOnToolsVersion = 27.0;
+					};
+				};
+			};
+			buildConfigurationList = D92F3ED83021F5170012C95A /* Build configuration list for PBXProject "MPWShell" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = D92F3ED43021F5170012C95A;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = D92F3EDE3021F5170012C95A /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D92F3EDC3021F5170012C95A /* MPW Shell */,
+				D91E1A6230580CB800C38680 /* MPWShellHelp */,
+				D9C03F7C305D409100CA82B2 /* ToolServer */,
+				D9B35D3E305D6F3300D02389 /* ToolServerHelp */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		D91E1A6130580CB800C38680 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D930190930581D45005EAF56 /* index.html in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D92F3EDB3021F5170012C95A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D9145C033058364A00789608 /* Modules in Resources */,
+				D91E1A6A30580DDD00C38680 /* MPWShellHelp.help in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D9B35D3D305D6F3300D02389 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D9B35DE9305D753200D02389 /* index.html in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D9C03F7B305D409100CA82B2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D9B35D46305D708A00D02389 /* ToolServerHelp.help in Resources */,
+				D9C03FB9305D45EE00CA82B2 /* Modules in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		D91E1B27305819AD00C38680 /* Re-index Help Files */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Re-index Help Files";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -x\n\ncd \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.help/Contents/Resources\"\n\nfor LANGUAGE in *.lproj;\ndo\n  pushd \"${LANGUAGE}\"\n  hiutil -I corespotlight -Caf \"${PRODUCT_NAME}.cshelpindex\" -vv .\n  hiutil -I lsm -Caf \"${PRODUCT_NAME}.helpindex\" -vv .\n  hiutil -I corespotlight -Tvf \"${PRODUCT_NAME}.cshelpindex\"\n  popd\ndone\n";
+		};
+		D9B35EBA305D785500D02389 /* Re-index Help Files */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Re-index Help Files";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -x\n\ncd \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.help/Contents/Resources\"\n\nfor LANGUAGE in *.lproj;\ndo\n  pushd \"${LANGUAGE}\"\n  hiutil -I corespotlight -Caf \"${PRODUCT_NAME}.cshelpindex\" -vv .\n  hiutil -I lsm -Caf \"${PRODUCT_NAME}.helpindex\" -vv .\n  hiutil -I corespotlight -Tvf \"${PRODUCT_NAME}.cshelpindex\"\n  popd\ndone\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D91E1A5F30580CB800C38680 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D92F3ED93021F5170012C95A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D9B35D3B305D6F3300D02389 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D9C03F79305D409100CA82B2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		D91E1A6930580DB400C38680 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D91E1A6230580CB800C38680 /* MPWShellHelp */;
+			targetProxy = D91E1A6830580DB400C38680 /* PBXContainerItemProxy */;
+		};
+		D9B35D45305D706C00D02389 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D9B35D3E305D6F3300D02389 /* ToolServerHelp */;
+			targetProxy = D9B35D44305D706C00D02389 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		D930190830581D45005EAF56 /* index.html */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D930190730581D45005EAF56 /* Base */,
+			);
+			name = index.html;
+			sourceTree = "<group>";
+		};
+		D9B35D4B305D725200D02389 /* index.html */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D9B35D4A305D725200D02389 /* Base */,
+			);
+			name = index.html;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		D91E1A6430580CB800C38680 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = S8EJ4SNLNS;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "MPWShellHelp/MPWShellHelp-Info.plist";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSPrincipalClass = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = nz.geek.rhubarb.MPWShellHelp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				WRAPPER_EXTENSION = help;
+			};
+			name = Debug;
+		};
+		D91E1A6530580CB800C38680 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = S8EJ4SNLNS;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "MPWShellHelp/MPWShellHelp-Info.plist";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSPrincipalClass = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = nz.geek.rhubarb.MPWShellHelp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				WRAPPER_EXTENSION = help;
+			};
+			name = Release;
+		};
+		D92F3EF33021F5180012C95A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = S8EJ4SNLNS;
+				ENABLE_APP_SANDBOX = NO;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MPWShell/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "MPW Shell";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2026 Roger Brown";
+				INFOPLIST_KEY_NSMainNibFile = MainMenu;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = nz.geek.rhubarb.MPWShell;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Debug;
+		};
+		D92F3EF43021F5180012C95A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = S8EJ4SNLNS;
+				ENABLE_APP_SANDBOX = NO;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MPWShell/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "MPW Shell";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2026 Roger Brown";
+				INFOPLIST_KEY_NSMainNibFile = MainMenu;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = nz.geek.rhubarb.MPWShell;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Release;
+		};
+		D92F3EF53021F5180012C95A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = S8EJ4SNLNS;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.5;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+			};
+			name = Debug;
+		};
+		D92F3EF63021F5180012C95A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = S8EJ4SNLNS;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.5;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+			};
+			name = Release;
+		};
+		D9B35D40305D6F3300D02389 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = S8EJ4SNLNS;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "ToolServerHelp/ToolServerHelp-Info.plist";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSPrincipalClass = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = nz.geek.rhubarb.ToolServerHelp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				WRAPPER_EXTENSION = help;
+			};
+			name = Debug;
+		};
+		D9B35D41305D6F3300D02389 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = S8EJ4SNLNS;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "ToolServerHelp/ToolServerHelp-Info.plist";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSPrincipalClass = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = nz.geek.rhubarb.ToolServerHelp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				WRAPPER_EXTENSION = help;
+			};
+			name = Release;
+		};
+		D9C03F89305D409200CA82B2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = S8EJ4SNLNS;
+				ENABLE_APP_SANDBOX = NO;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ToolServer/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = ToolServer;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainNibFile = MainMenu;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				INFOPLIST_KEY_NSViewGestureRecognizerIsExclusive = NO;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = nz.geek.rhubarb.ToolServer;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Debug;
+		};
+		D9C03F8A305D409200CA82B2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = S8EJ4SNLNS;
+				ENABLE_APP_SANDBOX = NO;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ToolServer/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = ToolServer;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainNibFile = MainMenu;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				INFOPLIST_KEY_NSViewGestureRecognizerIsExclusive = NO;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = nz.geek.rhubarb.ToolServer;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		D91E1A6630580CB800C38680 /* Build configuration list for PBXNativeTarget "MPWShellHelp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D91E1A6430580CB800C38680 /* Debug */,
+				D91E1A6530580CB800C38680 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D92F3ED83021F5170012C95A /* Build configuration list for PBXProject "MPWShell" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D92F3EF53021F5180012C95A /* Debug */,
+				D92F3EF63021F5180012C95A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D92F3EF23021F5180012C95A /* Build configuration list for PBXNativeTarget "MPW Shell" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D92F3EF33021F5180012C95A /* Debug */,
+				D92F3EF43021F5180012C95A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D9B35D42305D6F3300D02389 /* Build configuration list for PBXNativeTarget "ToolServerHelp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D9B35D40305D6F3300D02389 /* Debug */,
+				D9B35D41305D6F3300D02389 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D9C03F8B305D409200CA82B2 /* Build configuration list for PBXNativeTarget "ToolServer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D9C03F89305D409200CA82B2 /* Debug */,
+				D9C03F8A305D409200CA82B2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = D92F3ED53021F5170012C95A /* Project object */;
+}

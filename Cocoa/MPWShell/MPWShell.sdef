@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionary SYSTEM "file://localhost/System/Library/DTDs/sdef.dtd">
+<dictionary title="MPW Shell Terminology">
+    <suite name="MPW Shell" code="MPS " description="Commands for MPW Shell">
+        <command name="do script" code="coredosc" description="Executes PowerShell script">
+            <cocoa class="DoScriptCommand"/>
+            <direct-parameter description="The text or command to execute.">
+                <type type="text"/>
+            </direct-parameter>
+            <result description="The result of the execution.">
+                <type type="text"/>
+            </result>
+        </command>
+    </suite>
+</dictionary>

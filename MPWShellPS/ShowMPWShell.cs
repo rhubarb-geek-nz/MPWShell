@@ -12,7 +12,6 @@ namespace RhubarbGeekNz.MPWShell
         [Parameter(Mandatory = true, ValueFromPipeline = true, HelpMessage = "String Message", Position = 0)]
         public string Message;
 
-
         protected override void ProcessRecord()
         {
             IMPWShell shell = (IMPWShell)GetVariableValue("MPW Shell");

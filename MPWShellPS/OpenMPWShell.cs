@@ -8,7 +8,6 @@ using System.Management.Automation;
 namespace RhubarbGeekNz.MPWShell
 {
     [Cmdlet(VerbsCommon.Open, "MPWShell")]
-    [Alias("open")]
     sealed public class OpenMPWShell : PSCmdlet
     {
         [Parameter(Mandatory = true, ParameterSetName = "path", Position = 0)]

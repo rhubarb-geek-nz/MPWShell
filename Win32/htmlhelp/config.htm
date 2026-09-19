@@ -21,7 +21,7 @@
 			<TD>ToolServer</TD>
 			<TD>String</TD>
 			<TD>Command line used to run the PowerShell server</TD>
-			<TD>PowerShell.exe -NoProfile -NoLogo -NonInteractive -Command $ErrorActionPreference='Stop'; Import-Module 'C:\Program Files\rhubarb-geek-nz\MPW Shell\Modules\rhubarb-geek-nz.ToolServer\0.9.6\rhubarb-geek-nz.ToolServer.psd1' ; Invoke-MPWShell.ToolServer -Protocol 0c63fba6-7c2a-4b72-8de0-b3bd579dedaa</TD>
+			<TD>PowerShell.exe -NoProfile -NoLogo -NonInteractive -Command $ErrorActionPreference='Stop'; Import-Module 'C:\Program Files\rhubarb-geek-nz\MPW Shell\Modules\rhubarb-geek-nz.ToolServer\rhubarb-geek-nz.ToolServer.psd1' ; Invoke-MPWShell.ToolServer -Protocol 0c63fba6-7c2a-4b72-8de0-b3bd579dedaa</TD>
 		</TR>
 		<TR>
 			<TD>TextLimit</TD>
@@ -33,7 +33,7 @@
 			<TD>InitialScript</TD>
 			<TD>String</TD>
 			<TD>Used to initialise each Runspace</TD>
-			<TD>if ($PSStyle) { $PSStyle.OutputRendering = 'PlainText' } ; Import-Module 'C:\Program Files\rhubarb-geek-nz\MPW Shell\Modules\rhubarb-geek-nz.MPWShell\0.9.6\rhubarb-geek-nz.MPWShell.psd1'</TD>
+			<TD>if ($PSStyle) { $PSStyle.OutputRendering = 'PlainText' } ; Import-Module 'C:\Program Files\rhubarb-geek-nz\MPW Shell\Modules\rhubarb-geek-nz.MPWShell\rhubarb-geek-nz.MPWShell.psd1'</TD>
 		</TR>
 	</TBODY>
 </TABLE>

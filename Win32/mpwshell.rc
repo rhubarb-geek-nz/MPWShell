@@ -65,8 +65,8 @@ BEGIN
 END
 
 1 VERSIONINFO
- FILEVERSION mpwshell_INT4
- PRODUCTVERSION mpwshell_INT4
+ FILEVERSION MPWSHELL_INT4
+ PRODUCTVERSION MPWSHELL_INT4
  FILEFLAGSMASK 0x3fL
  FILEFLAGS VS_FF_PRERELEASE
  FILEOS VOS_NT_WINDOWS32
@@ -80,12 +80,12 @@ BEGIN
             VALUE "Comments", "See https://github.com/rhubarb-geek-nz/mpwshell\0"
             VALUE "CompanyName", "rhubarb-geek-nz\0"
             VALUE "FileDescription", "Text Editor based on Notepad\0"
-            VALUE "FileVersion", mpwshell_STR4
+            VALUE "FileVersion", MPWSHELL_STR4
             VALUE "InternalName", "mpwshell\0"
             VALUE "LegalCopyright", "© Roger Brown. 2026\0"
             VALUE "OriginalFilename", "MPWShell.exe\0"
             VALUE "ProductName", "mpwshell\0"
-            VALUE "ProductVersion", mpwshell_STR4
+            VALUE "ProductVersion", MPWSHELL_STR4
         END
     END
     BLOCK "VarFileInfo"

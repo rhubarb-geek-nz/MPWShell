@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF8"/>
+        <title>MPW Shell</title>
+        <meta name="keywords" content="specific, comma, delimited, keywords" />
+        <meta name="description" content="MPW Shell is a GUI for PowerShell." />
+        <meta name="robots" content="index, anchor" />
+    </head>
+    <body>
+        <h2>MPW Shell</h2>
+        <p>MPW Shell is a GUI for <a href="https://github.com/PowerShell/PowerShell">PowerShell</a>.
+It provides a simple document centric interface where PowerShell commands and script fragments can be run directly from text documents.
+To execute a command use either &#x2318;+&#x23CE or &#x2324, it will execute either the selected text or the current line.
+Pressing &#x241B or &#x2318;+. can be used to cancel a command.</p>
+<h2>How it works</h2>
+<p>The program launches PowerShell as a child process running a <a href="https://www.powershellgallery.com/packages/rhubarb-geek-nz.ToolServer/0.9.2">ToolServer</a> cmdlet that allows it to execute commands and receive the responses.
+Each document is mapped to a runspace.</p><p>A <a href="https://www.powershellgallery.com/packages/rhubarb-geek-nz.MPWShell/0.9.2">module</a> can also be loaded into each runspace that provides cmdlets to manage the documents.</p>
+<UL>
+<LI>New-MPWShell - to create a new document with optional content</LI>
+<LI>Open-MPWShell - to open an existing document</LI>
+<LI>Show-MPWShell - to present the user with an alert</LI>
+</UL>
+<h2>Apple Script</h2>
+You can use the following in the Script Editor application.
+<pre><code>
+tell application "MPW Shell"
+	do script "$PSVersionTable"
+end tell
+</code></pre>
+Likewise from the shell command line
+<pre><code>
+% osascript -e 'tell application "MPW Shell" to do script "Get-Runspace"'
+</code><pre>
+<h2>Preferences</h2>
+<p>The preferences are in ~/Library/Preferences/nz.geek.rhubarb.mpwshell.plist.</p>
+<TABLE>
+	<THEAD>
+		<TR align="left">
+			<TH>Name</TH>
+			<TH>Type</TH>
+			<TH>Purpose</TH>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR>
+			<TD>ToolServerLaunchPath</TD>
+			<TD>String</TD>
+			<TD>Path to executable</TD>
+		</TR>
+		<TR>
+			<TD>ToolServerArguments</TD>
+			<TD>Array</TD>
+			<TD>Arguments passed to the ToolServer process</TD>
+		</TR>
+		<TR>
+			<TD>ToolServerEnvironment</TD>
+			<TD>Dictionary</TD>
+			<TD>Values to add to the environment for the ToolServer process</TD>
+		</TR>
+		<TR>
+			<TD>InitialScript</TD>
+			<TD>String</TD>
+			<TD>Used to initialise each Runspace</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<p>The defaults are the equivalent of the following XML:</p>
+<pre><code>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;
+&lt;plist version="1.0"&gt;
+&lt;dict&gt;
+	&lt;key&gt;ToolServerLaunchPath&lt;/key&gt;
+	&lt;string&gt;/usr/local/bin/pwsh&lt;/string&gt;
+	&lt;key&gt;ToolServerArguments&lt;/key&gt;
+	&lt;array&gt;
+		&lt;string&gt;-NoLogo&lt;/string&gt;
+		&lt;string&gt;-NoProfile&lt;/string&gt;
+		&lt;string&gt;-NonInteractive&lt;/string&gt;
+		&lt;string&gt;-Command&lt;/string&gt;
+		&lt;string&gt;
+			$ErrorActionPreference = 'Stop' ;
+			Import-Module '/Applications/MPW Shell.app/Contents/Resources/Modules/rhubarb-geek-nz.ToolServer/rhubarb-geek-nz.ToolServer.psd1' ;
+			Invoke-MPWShell.ToolServer -Protocol 0c63fba6-7c2a-4b72-8de0-b3bd579dedaa
+		&lt;/string&gt;
+	&lt;/array&gt;
+	&lt;key&gt;ToolServerEnvironment&lt;/key&gt;
+	&lt;dict&gt;
+		&lt;key&gt;POWERSHELL_TELEMETRY_OPTOUT&lt;/key&gt;
+		&lt;string&gt;true&lt;/string&gt;
+		&lt;key&gt;POWERSHELL_UPDATECHECK&lt;/key&gt;
+		&lt;string&gt;Off&lt;/string&gt;
+	&lt;/dict&gt;
+	&lt;key&gt;InitialScript&lt;/key&gt;
+	&lt;string&gt;
+		if ($PSStyle) { $PSStyle.OutputRendering = 'PlainText' } ;
+		Import-Module '/Applications/MPW Shell.app/Contents/Resources/Modules/rhubarb-geek-nz.MPWShell/rhubarb-geek-nz.MPWShell.psd1'
+	&lt;/string&gt;
+&lt;/dict&gt;
+&lt;/plist&gt;
+</code></pre>
+
+<h2>MIT License</h2>
+This software is covered by the MIT License.
+<pre><code>
+MIT License
+
+Copyright (c) 2026 rhubarb-geek-nz
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+</code></pre>
+<h2>MPW Shell is open-source</h2>
+This <a href="https://github.com/rhubarb-geek-nz/MPWShell">project<a/> supports Windows, Linux, macOS and FreeBSD.
+    </body>
+</html>
