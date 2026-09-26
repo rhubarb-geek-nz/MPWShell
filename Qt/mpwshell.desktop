@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=MPW Shell
+Exec=mpwshell
+Icon=/usr/share/icons/locolor/32x32/apps/mpwshell.png
+Terminal=false
+Categories=TextEditor;Development;

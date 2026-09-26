@@ -1,0 +1,15 @@
+{
+	"ToolServerProgram": "pwsh",
+	"ToolServerArguments": [
+		"-NoLogo",
+		"-NoProfile",
+		"-NonInteractive",
+		"-Command",
+		"Invoke-MPWShell.ToolServer -Protocol 0c63fba6-7c2a-4b72-8de0-b3bd579dedaa"
+	],
+	"ToolServerEnvironment": {
+		"POWERSHELL_TELEMETRY_OPTOUT": "true",
+		"POWERSHELL_UPDATECHECK": "Off"
+	},
+	"InitialScript": "if ($PSStyle) { $PSStyle.OutputRendering = 'PlainText' } ; Import-Module rhubarb-geek-nz.MPWShell"
+}

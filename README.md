@@ -1,5 +1,5 @@
 ﻿# MPWShell
-Mocha Power Shell - text editor with embedded scripting engine
+Monster Power Shell - text editor with embedded scripting engine
 
 ## Introduction
 This is a simple text editor with embedded `PowerShell`.
@@ -51,35 +51,10 @@ The program is configurable in terms of how it runs the child tool server. It ca
 
 * Windows - `HKCU:\Software\rhubarb-geek-nz\MPW Shell` values `ToolServer` and `InitialScript`.
 * Motif - X11 resources `mpwshell.toolServer` and `mpwshell.initialScript`.
-* macOS - `~/Library/Preferences/nz.geek.rhubarb.MPWShell.plist`, see [Help](Cocoa/MPWShellHelp/Resources/Base.lproj/index.html)
+* macOS - `~/Library/Preferences/nz.geek.rhubarb.MPWShell.plist`, see [Help](Cocoa/MPWShellHelp/Resources/Base.lproj/index.html).
+* Qt - '~/.config/rhubarb.geek.nz/mpwshell.conf'.
 
 The `ToolServer` property is a command line for running `PowerShell`, this could include using `ssh` to run it on a remote machine. `InitialScript` is run in each runspace when created.
-
-## Validation
-The UI should be in Unicode. The pipe between the UI and the ToolServer uses UTF-8 for encoding character strings. This should work both on Windows and on Linux with a UTF-8 locale. If there are characters that don't appear correct you can verify. Two cases to check are copyright and trademark.
-```
-"`u{A9}"
-```
-should appear as a [copyright symbol](https://en.wikipedia.org/wiki/Copyright_symbol)
-```
-©
-```
-and
-```
-"`u{2122}"
-```
-should appear as a [trademark symbol](https://en.wikipedia.org/wiki/Trademark_symbol)
-```
-™
-```
-If they appear incorrect you can round trip them, by quoting and casting what was printed.
-```
-([int][char]"™").ToString('X')
-```
-this should return
-```
-2122
-```
 
 ## Troubleshooting
 The following error is caused by no DISPLAY environment for X11.
@@ -126,6 +101,19 @@ The program needs to run PowerShell, as such it does not meet most app store san
 ## WSL
 The program supports being run from within a Linux WSL environment with X11 display on the Windows desktop.
 
+## Linux Desktop
+The Qt project contains the desktop file and icon for XDG. Use Motif with `mwm` or `CDE`.
+
+## Qt
+Although Qt is cross-platform, here it is only used for Linux and FreeBSD. Use Cocoa on macOS and Win32 on Windows. Preferences are read from '~/.config/rhubarb.geek.nz/mpwshell.conf'.
+
+```
+[General]
+InitialScript="if ($PSStyle) { $PSStyle.OutputRendering = 'PlainText' } ; Import-Module rhubarb-geek-nz.MPWShell"
+ToolServerArguments=-NoLogo, -NoProfile, -NonInteractive, -Command, Invoke-MPWShell.ToolServer -Protocol 0c63fba6-7c2a-4b72-8de0-b3bd579dedaa
+ToolServerProgram=pwsh
+```
+
 ## AppleScript support
 On macOS the `MPW Shell.app` application supports `do script` to allow invocation using AppleEvents. The Cocoa `ToolServer.app` is a stripped down headless application that only supports `do script`.
 
@@ -153,12 +141,13 @@ Both the Win32 MSI and macOS pkg already include these modules and are loaded di
 The Linux/FreeBSD installations and the Win32 msixbundles require the modules to be pre-installed, for example from [PSGallery](https://www.powershellgallery.com).
 
 ## Technology, toolkits and languages
-This is an old-meets-new project. The UI programs use programming languages and APIs from the 20ᵗʰ century however they are intended to be good desktop citizens today. The Win32 API dates from [Windows NT](https://en.wikipedia.org/wiki/Windows_NT), Cocoa has its origins in [NeXTSTEP](https://en.wikipedia.org/wiki/NeXTSTEP) and [Motif](https://sourceforge.net/projects/motif/) is a building block of the [Common Desktop Environment](https://sourceforge.net/projects/cdesktopenv/).
+This is an old-meets-new project. The UI programs use programming languages and APIs from the 20ᵗʰ century however they are intended to be good desktop citizens today. The Win32 API dates from [Windows NT](https://en.wikipedia.org/wiki/Windows_NT), Cocoa has its origins in [NeXTSTEP](https://en.wikipedia.org/wiki/NeXTSTEP) and [Motif](https://sourceforge.net/projects/motif/) is a building block of the [Common Desktop Environment](https://sourceforge.net/projects/cdesktopenv/). Qt dates from Trolltech in 1991 and used in mobile phones from Nokia and BlackBerry.
 
 |Project|OS|Toolkit|Language|Notes|
 |-------|--|-------|--------|-----|
 |Cocoa|macOS|AppKit|Objective-C|NeXTSTEP 1988, Mac OS X 2001|
 |Motif|Linux/FreeBSD|Motif|C|OSF 1989|
+|Qt|Linux/FreeBSD|Qt|C++|Trolltech 1991|
 |Win32|Windows|Win32|C|Windows NT 3.1 1993|
 
 ## Roadmap

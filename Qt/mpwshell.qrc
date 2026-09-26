@@ -1,0 +1,6 @@
+<RCC>
+	<qresource prefix="/">
+		<file>mpwshell.png</file>
+		<file>mpwshell.json</file>
+	</qresource>
+</RCC>

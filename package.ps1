@@ -183,6 +183,65 @@ if ($IsLinux)
 	{
 		Pop-Location
 	}
+
+	Push-Location -LiteralPath 'Qt'
+
+	try
+	{
+		Get-Command -Name 'qmake*' | Select-Object -ExpandProperty Name | Sort-Object -Unique | ForEach-Object -Process {
+			$qmake = $_
+
+			if (Test-Path -LiteralPath 'Makefile' -PathType Leaf)
+			{
+				make clean
+
+				if ($LastExitCode)
+				{
+					throw "LastExitCode $LastExitCode"
+				}
+			}
+
+			foreach ($file in 'Makefile','mpwshell')
+			{
+				if (Test-Path -LiteralPath $file -PathType Leaf)
+				{
+					Remove-Item -LiteralPath $file
+				}
+			}
+
+			sh -c "$qmake VERSION=$Version"
+
+			if ($LastExitCode)
+			{
+				throw "LastExitCode $LastExitCode"
+			}
+
+			make
+
+			if ($LastExitCode)
+			{
+				throw "LastExitCode $LastExitCode"
+			}
+
+			sh -c "./package.sh $Version"
+
+			if ($LastExitCode)
+			{
+				throw "LastExitCode $LastExitCode"
+			}
+
+			make clean
+
+			if ($LastExitCode)
+			{
+				throw "LastExitCode $LastExitCode"
+			}
+		}
+	}
+	finally
+	{
+		Pop-Location
+	}
 }
 
 if ($IsWindows -or ( 'Desktop' -eq $PSEdition ))
