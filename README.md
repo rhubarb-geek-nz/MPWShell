@@ -37,12 +37,13 @@ You are only limited by what PowerShell can do.
 Use `Control+Return` ( or `⌘+⏎` on macOS ) to invoke a selected area of text or the current line as a `PowerShell` script.
 
 ## How does it work?
-The project has five components
+The project has six components
 * `ToolServerPS` - this runs in a `PowerShell` process providing communications over stdin/stdout to its parent in order to manage a set of [Runspaces](https://learn.microsoft.com/en-us/powershell/scripting/developer/hosting/creating-runspaces). The parent makes requests to manage the `Runspaces` and gives them scripts to run. The output is returned to the parent.
 * `MPWShellPS` - an optional set of cmdlets to run in each guest `Runspace` providing simple tools to open and create files.
 * `Win32/mpwshell` - this is a clone of the classic `Notepad` that lets you execute `PowerShell` scripts inline and capture the response directly in the document
 * `Motif/mpwshell` - this is an X11 editor based on [CDE](https://sourceforge.net/projects/cdesktopenv/) `dtpad` that integrates directly with PowerShell.
 * `Cocoa/MPWShell` - this is a native `AppKit` app with plain-text document based UI as a front for PowerShell.
+* `Qt/mpwshell` - Qt based UI for Linux and FreeBSD.
 
 The mapping is one document window to one runspace within the tool server. This provides isolation for each document. Documents can be opened or created using the menus of the UI or `MPWShellPS` cmdlets within the document.
 
@@ -52,7 +53,7 @@ The program is configurable in terms of how it runs the child tool server. It ca
 * Windows - `HKCU:\Software\rhubarb-geek-nz\MPW Shell` values `ToolServer` and `InitialScript`.
 * Motif - X11 resources `mpwshell.toolServer` and `mpwshell.initialScript`.
 * macOS - `~/Library/Preferences/nz.geek.rhubarb.MPWShell.plist`, see [Help](Cocoa/MPWShellHelp/Resources/Base.lproj/index.html).
-* Qt - '~/.config/rhubarb.geek.nz/mpwshell.conf'.
+* Qt - `~/.config/rhubarb.geek.nz/mpwshell.conf`.
 
 The `ToolServer` property is a command line for running `PowerShell`, this could include using `ssh` to run it on a remote machine. `InitialScript` is run in each runspace when created.
 
@@ -105,7 +106,7 @@ The program supports being run from within a Linux WSL environment with X11 disp
 The Qt project contains the desktop file and icon for XDG. Use Motif with `mwm` or `CDE`.
 
 ## Qt
-Although Qt is cross-platform, here it is only used for Linux and FreeBSD. Use Cocoa on macOS and Win32 on Windows. Preferences are read from '~/.config/rhubarb.geek.nz/mpwshell.conf'.
+Although Qt is cross-platform, here it is only used for Linux and FreeBSD. Use Cocoa on macOS and Win32 on Windows. Preferences are read from `~/.config/rhubarb.geek.nz/mpwshell.conf`.
 
 ```
 [General]
